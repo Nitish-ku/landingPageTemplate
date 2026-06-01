@@ -24,12 +24,18 @@
     background-attachment:fixed;
   }
   .wrap { max-width:460px; margin:0 auto; padding:0 20px; }
+
+  /* topbar */
   .topbar { display:flex; align-items:center; gap:8px; padding:20px 0 26px; }
   .dot { width:8px; height:8px; border-radius:50%; background:var(--sage); box-shadow:0 0 10px var(--sage); }
   .brandtag { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+
+  /* badge */
   .badge { display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--sage); border:1px solid var(--border); background:var(--surface); padding:7px 12px; border-radius:var(--radius); margin-bottom:22px; }
   .badge .pulse { width:6px; height:6px; border-radius:50%; background:var(--sage); animation:pulse 1.8s infinite; }
   @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+
+  /* hero */
   h1 { font-size:38px; line-height:1.08; font-weight:700; letter-spacing:-0.7px; margin-bottom:18px; }
   h1 .free { color:var(--sage); }
   .sub { font-size:16.5px; color:var(--muted); line-height:1.55; margin-bottom:18px; }
@@ -37,12 +43,73 @@
   .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px; }
   .chip { font-family:var(--font-mono); font-size:11px; letter-spacing:0.5px; color:var(--text); background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:7px 11px; display:flex; align-items:center; gap:6px; }
   .chip b { color:var(--sage); }
+
+  /* hero image */
+  .hero-img { width:100%; border-radius:var(--radius); border:1px solid var(--border); margin-bottom:32px; display:block; }
+
+  /* sections */
+  .section { padding:38px 0 6px; }
+  .eyebrow { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--sage); margin-bottom:12px; }
+  .section h2 { font-size:25px; line-height:1.18; font-weight:700; letter-spacing:-0.4px; margin-bottom:18px; }
+
+  /* problem */
+  .pain { list-style:none; margin-top:6px; }
+  .pain li { display:flex; gap:11px; align-items:flex-start; padding:11px 0; border-bottom:1px solid var(--border); font-size:15px; color:var(--text); }
+  .pain li:last-child { border-bottom:none; }
+  .pain .x { color:#e0686d; font-family:var(--font-mono); flex:0 0 auto; margin-top:1px; }
+
+  /* timeline */
+  .timeline { position:relative; margin-top:8px; }
+  .step { display:flex; gap:14px; padding-bottom:22px; }
+  .step:last-child { padding-bottom:0; }
+  .step .rail { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; }
+  .step .num { width:38px; height:38px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-weight:600; font-size:13px; color:var(--sage); }
+  .step .line { width:1px; flex:1; background:var(--border); margin-top:6px; min-height:18px; }
+  .step:last-child .line { display:none; }
+  .step .body h3 { font-size:16px; font-weight:600; margin-bottom:5px; }
+  .step .body h3 span { font-family:var(--font-mono); font-size:11px; color:var(--muted); display:block; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+  .step .body p { font-size:14px; color:var(--muted); line-height:1.55; }
+
+  /* outcomes */
+  .outcomes { display:grid; gap:10px; margin-top:6px; }
+  .outcome { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px; display:flex; gap:12px; align-items:flex-start; }
+  .outcome .ck { color:var(--sage); font-family:var(--font-mono); flex:0 0 auto; margin-top:1px; }
+  .outcome p { font-size:14.5px; line-height:1.5; }
+  .outcome p b { display:block; font-weight:600; margin-bottom:2px; }
+  .outcome p span { color:var(--muted); font-size:13.5px; }
+
+  /* prize */
+  .prize-box { background:linear-gradient(180deg, rgba(98,191,161,0.10), rgba(98,191,161,0.03)); border:1px solid rgba(98,191,161,0.25); border-radius:var(--radius); padding:24px 20px; text-align:center; margin-top:8px; }
+  .prize-box .amt { font-size:40px; font-weight:700; color:var(--sage); letter-spacing:-1px; line-height:1; margin-bottom:10px; }
+  .prize-box p { font-size:14px; color:var(--muted); margin-bottom:16px; }
+  .triad-row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:14px; }
+  .triad-chip { font-family:var(--font-mono); font-size:11px; letter-spacing:0.5px; color:var(--sage); background:rgba(98,191,161,0.08); border:1px solid rgba(98,191,161,0.2); border-radius:var(--radius); padding:7px 12px; }
+  .prize-note { font-family:var(--font-mono); font-size:11px; color:var(--muted); letter-spacing:0.3px; }
+
+  /* fit */
+  .fit { display:grid; grid-template-columns:1fr; gap:10px; margin-top:6px; }
+  .fit .col { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
+  .fit .col h4 { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
+  .fit .col.yes h4 { color:var(--sage); }
+  .fit .col.no h4 { color:var(--muted); }
+  .fit .col ul { list-style:none; }
+  .fit .col li { font-size:14px; padding:5px 0; display:flex; gap:8px; }
+  .fit .col.yes li { color:var(--text); }
+  .fit .col.no li { color:var(--muted); }
+
+  /* form card */
   .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px 20px; margin-bottom:16px; }
   .card-title { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
   .card-sub { font-size:13px; color:var(--muted); margin-bottom:18px; }
   .field { margin-bottom:16px; }
   .field label { display:block; font-family:var(--font-mono); font-size:11px; letter-spacing:0.5px; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
-  .field input { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); color:var(--text); font-family:var(--font-head); font-size:16px; padding:13px 14px; transition:border-color 0.2s, box-shadow 0.2s; }
+  .field input[type="text"],
+  .field input[type="email"],
+  .field input[type="tel"] {
+    width:100%; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius);
+    color:var(--text); font-family:var(--font-head); font-size:16px; padding:13px 14px;
+    transition:border-color 0.2s, box-shadow 0.2s;
+  }
   .field input::placeholder { color:#5b6675; }
   .field input:focus { outline:none; border-color:var(--sage); box-shadow:0 0 0 3px rgba(98,191,161,0.12); }
   .field input.invalid { border-color:#e0686d; box-shadow:0 0 0 3px rgba(224,104,109,0.10); }
@@ -51,6 +118,8 @@
   .phone-row { display:flex; gap:8px; }
   .phone-row .cc { flex:0 0 64px; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); color:var(--muted); font-family:var(--font-mono); font-size:15px; text-align:center; display:flex; align-items:center; justify-content:center; }
   .phone-row input { flex:1; }
+
+  /* chronotype */
   .chrono-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
   .chrono { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:14px 6px; text-align:center; cursor:pointer; transition:border-color 0.2s, background 0.2s, transform 0.2s; user-select:none; }
   .chrono:active { transform:scale(0.97); }
@@ -59,6 +128,25 @@
   .chrono .time { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:0.3px; }
   .chrono.selected { border-color:var(--sage); background:rgba(98,191,161,0.10); }
   .chrono.selected .name { color:var(--sage); }
+
+  /* order bump checkbox */
+  .bump-check { background:linear-gradient(180deg, rgba(88,147,234,0.08), rgba(88,147,234,0.03)); border:1px dashed rgba(88,147,234,0.35); border-radius:var(--radius); padding:16px; margin-top:6px; margin-bottom:18px; cursor:pointer; transition:border-color 0.2s, background 0.2s; }
+  .bump-check.checked { border-color:var(--blue); background:rgba(88,147,234,0.12); }
+  .bump-check-row { display:flex; align-items:flex-start; gap:12px; }
+  .bump-checkbox { width:20px; height:20px; border:2px solid var(--border); border-radius:3px; flex:0 0 auto; margin-top:2px; display:flex; align-items:center; justify-content:center; transition:border-color 0.2s, background 0.2s; background:var(--bg); }
+  .bump-check.checked .bump-checkbox { border-color:var(--blue); background:var(--blue); }
+  .bump-checkbox .tick { display:none; color:#fff; font-size:12px; font-weight:700; }
+  .bump-check.checked .bump-checkbox .tick { display:block; }
+  .bump-label { flex:1; }
+  .bump-label .bump-tag { font-family:var(--font-mono); font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--blue); margin-bottom:4px; }
+  .bump-label strong { font-size:14.5px; font-weight:600; display:block; margin-bottom:4px; }
+  .bump-label p { font-size:13px; color:var(--muted); line-height:1.5; }
+  .bump-label .price { margin-top:6px; font-size:13px; }
+  .bump-label .price .strike { text-decoration:line-through; color:#5b6675; }
+  .bump-label .price .now { color:var(--sage); font-weight:600; }
+  .bump-label .price .save { font-family:var(--font-mono); font-size:11px; color:var(--muted); }
+
+  /* buttons */
   .btn { display:block; width:100%; border:none; border-radius:var(--radius); font-family:var(--font-head); font-size:16px; font-weight:600; padding:15px; cursor:pointer; transition:filter 0.2s, transform 0.2s; }
   .btn:active { transform:scale(0.99); }
   .btn-primary { background:var(--blue); color:#fff; }
@@ -68,46 +156,8 @@
   .btn-sage { background:var(--sage); color:#0a1a14; }
   .btn-sage:hover { filter:brightness(1.06); }
   .submit-note { font-family:var(--font-mono); font-size:11px; color:var(--muted); text-align:center; margin-top:12px; }
-  .section { padding:38px 0 6px; }
-  .eyebrow { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--sage); margin-bottom:12px; }
-  .section h2 { font-size:25px; line-height:1.18; font-weight:700; letter-spacing:-0.4px; margin-bottom:18px; }
-  .pain { list-style:none; margin-top:6px; }
-  .pain li { display:flex; gap:11px; align-items:flex-start; padding:11px 0; border-bottom:1px solid var(--border); font-size:15px; color:var(--text); }
-  .pain li:last-child { border-bottom:none; }
-  .pain .x { color:#e0686d; font-family:var(--font-mono); flex:0 0 auto; margin-top:1px; }
-  .timeline { position:relative; margin-top:8px; }
-  .step { display:flex; gap:14px; padding-bottom:22px; position:relative; }
-  .step:last-child { padding-bottom:0; }
-  .step .rail { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; }
-  .step .num { width:38px; height:38px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-weight:600; font-size:13px; color:var(--sage); }
-  .step .line { width:1px; flex:1; background:var(--border); margin-top:6px; min-height:18px; }
-  .step:last-child .line { display:none; }
-  .step .body h3 { font-size:16px; font-weight:600; margin-bottom:5px; }
-  .step .body h3 span { font-family:var(--font-mono); font-size:11px; color:var(--muted); display:block; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
-  .step .body p { font-size:14px; color:var(--muted); line-height:1.55; }
-  .outcomes { display:grid; grid-template-columns:1fr; gap:10px; margin-top:6px; }
-  .outcome { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px; display:flex; gap:12px; align-items:flex-start; }
-  .outcome .ck { color:var(--sage); font-family:var(--font-mono); flex:0 0 auto; margin-top:1px; }
-  .outcome p { font-size:14.5px; line-height:1.5; }
-  .outcome p b { display:block; font-weight:600; margin-bottom:2px; }
-  .outcome p span { color:var(--muted); font-size:13.5px; }
-  .prize-box { background:linear-gradient(180deg, rgba(98,191,161,0.10), rgba(98,191,161,0.03)); border:1px solid rgba(98,191,161,0.25); border-radius:var(--radius); padding:24px 20px; text-align:center; margin-top:8px; }
-  .prize-box .amt { font-size:40px; font-weight:700; color:var(--sage); letter-spacing:-1px; line-height:1; margin-bottom:8px; }
-  .prize-box p { font-size:14px; color:var(--muted); }
-  .fit { display:grid; grid-template-columns:1fr; gap:10px; margin-top:6px; }
-  .fit .col { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
-  .fit .col h4 { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
-  .fit .col.yes h4 { color:var(--sage); }
-  .fit .col.no h4 { color:var(--muted); }
-  .fit .col ul { list-style:none; }
-  .fit .col li { font-size:14px; padding:5px 0; color:var(--text); display:flex; gap:8px; }
-  .fit .col.no li { color:var(--muted); }
-  .bump { border:1px dashed var(--border); background:linear-gradient(180deg, rgba(88,147,234,0.07), rgba(88,147,234,0.02)); border-radius:var(--radius); padding:18px; margin-top:8px; }
-  .bump .tag { font-family:var(--font-mono); font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--blue); margin-bottom:8px; }
-  .bump h3 { font-size:17px; font-weight:600; margin-bottom:8px; }
-  .bump p { font-size:13.5px; color:var(--muted); line-height:1.5; }
-  .bump .price-strike { text-decoration:line-through; color:#5b6675; }
-  .bump .price-now { color:var(--sage); font-weight:600; }
+
+  /* faq */
   .faq { margin-top:6px; }
   .qa { border-bottom:1px solid var(--border); }
   .qa summary { cursor:pointer; list-style:none; padding:15px 0; font-size:15px; font-weight:500; display:flex; justify-content:space-between; align-items:center; gap:12px; }
@@ -115,19 +165,28 @@
   .qa summary .plus { color:var(--sage); font-family:var(--font-mono); transition:transform 0.2s; flex:0 0 auto; }
   .qa[open] summary .plus { transform:rotate(45deg); }
   .qa p { font-size:14px; color:var(--muted); line-height:1.6; padding:0 0 16px; }
-  .footer-src { font-family:var(--font-mono); font-size:10px; color:#3d4654; text-align:center; padding:36px 0 10px; letter-spacing:0.5px; }
-  .sticky-cta { position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(15,17,21,0.92); backdrop-filter:blur(10px); border-top:1px solid var(--border); padding:12px 16px calc(12px + env(safe-area-inset-bottom)); transform:translateY(120%); transition:transform 0.3s ease; }
+
+  /* footer */
+  .footer { padding:40px 0 16px; border-top:1px solid var(--border); margin-top:32px; }
+  .footer-src { font-family:var(--font-mono); font-size:10px; color:#3d4654; text-align:center; margin-bottom:8px; letter-spacing:0.5px; }
+  .footer-info { font-family:var(--font-mono); font-size:10px; color:#3d4654; text-align:center; letter-spacing:0.3px; line-height:1.7; }
+  .footer-info a { color:#3d4654; text-decoration:none; }
+
+  /* sticky cta */
+  .sticky-cta { position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(15,17,21,0.94); backdrop-filter:blur(10px); border-top:1px solid var(--border); padding:10px 16px calc(10px + env(safe-area-inset-bottom)); transform:translateY(120%); transition:transform 0.3s ease; }
   .sticky-cta.show { transform:translateY(0); }
-  .sticky-cta .inner { max-width:460px; margin:0 auto; display:flex; align-items:center; gap:12px; }
+  .sticky-cta .inner { max-width:460px; margin:0 auto; display:flex; align-items:center; gap:10px; }
   .sticky-cta .label { flex:1; }
-  .sticky-cta .label b { display:block; font-size:13px; font-weight:600; }
+  .sticky-cta .label b { display:block; font-size:12px; font-weight:600; }
   .sticky-cta .label span { font-family:var(--font-mono); font-size:10px; color:var(--sage); letter-spacing:0.5px; }
-  .sticky-cta button { flex:0 0 auto; width:auto; padding:12px 18px; font-size:14px; }
+  .sticky-cta button { flex:0 0 auto; width:auto; padding:11px 16px; font-size:14px; }
+
+  /* interstitial */
   .interstitial { position:fixed; inset:0; z-index:100; background:var(--bg); background-image:radial-gradient(800px 500px at 50% 0%, rgba(88,147,234,0.10), transparent 60%); display:none; flex-direction:column; justify-content:center; padding:28px 24px; overflow-y:auto; }
   .interstitial.show { display:flex; animation:fade 0.3s ease; }
-  @keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  @keyframes fade { from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;} }
   .inter-inner { max-width:400px; margin:0 auto; width:100%; }
-  .inter-badge { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--sage); margin-bottom:14px; display:flex; align-items:center; gap:7px; }
+  .inter-badge { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--sage); margin-bottom:14px; }
   .interstitial h2 { font-size:26px; line-height:1.15; font-weight:700; margin-bottom:14px; letter-spacing:-0.5px; }
   .interstitial .idesc { font-size:15px; color:var(--muted); line-height:1.55; margin-bottom:8px; }
   .interstitial .iprice { font-size:15px; margin-bottom:26px; }
@@ -135,37 +194,126 @@
   .interstitial .iprice .now { color:var(--sage); font-weight:600; }
   .interstitial .btn { margin-bottom:10px; }
   .placeholder-flag { font-family:var(--font-mono); font-size:10px; color:#c9a35b; border:1px solid rgba(201,163,91,0.3); background:rgba(201,163,91,0.06); border-radius:var(--radius); padding:8px 10px; margin-top:18px; text-align:center; letter-spacing:0.3px; }
+
+  /* animations */
   .reveal { opacity:0; transform:translateY(10px); animation:rise 0.5s ease forwards; }
-  @keyframes rise { to { opacity:1; transform:none; } }
+  @keyframes rise { to{opacity:1;transform:none;} }
   .r1{animation-delay:.05s} .r2{animation-delay:.12s} .r3{animation-delay:.19s}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="topbar reveal r1"><span class="dot"></span><span class="brandtag">Wired to Launch</span></div>
-    <span class="badge reveal r1"><span class="pulse"></span>Cohort 02 &middot; Starts Friday 9:00 AM IST</span>
-    <h1 class="reveal r2">The 72-Hour Founder Sprint. <span class="free">Free.</span></h1>
-    <p class="sub reveal r2">Pick your idea. Build your funnel. Get your first outreach done. In three days, you go from <strong>"I should start something"</strong> to <strong>a live offer with real people in the pipeline.</strong></p>
-    <div class="meta-row reveal r2">
-      <span class="chip">&#9889; <b>72 hours</b></span>
-      <span class="chip">&#127942; <b>&#8377;10,000</b> prize</span>
-      <span class="chip">&#128184; Free entry</span>
-      <span class="chip">&#128205; Virtual</span>
+
+<div class="wrap">
+
+  <!-- 01 HERO -->
+  <div class="topbar reveal r1"><span class="dot"></span><span class="brandtag">Wired to Launch</span></div>
+  <span class="badge reveal r1"><span class="pulse"></span>Cohort 02 &middot; Starts Friday 9:00 AM IST</span>
+  <h1 class="reveal r2">The 72-Hour Founder Sprint. <span class="free">Free.</span></h1>
+  <p class="sub reveal r2">Pick your idea. Build your funnel. Get your first outreach done. In three days, you go from <strong>"I should start something"</strong> to <strong>a live offer with real people in the pipeline.</strong></p>
+  <div class="meta-row reveal r2">
+    <span class="chip">&#9889; <b>72 hours</b></span>
+    <span class="chip">&#127942; <b>&#8377;10,000</b> prize</span>
+    <span class="chip">&#127903; Free entry</span>
+    <span class="chip">&#128205; Virtual</span>
+  </div>
+
+  <!-- hero image — swap src for final asset -->
+  <img src="hero.png" alt="Wired to Launch — Sprint 01 status" class="hero-img reveal r3" onerror="this.style.display='none'">
+
+  <!-- 02 THE PROBLEM -->
+  <div class="section">
+    <div class="eyebrow">// Sound familiar?</div>
+    <h2>You don't have an idea problem. You have a <em>finishing</em> problem.</h2>
+    <ul class="pain">
+      <li><span class="x">&times;</span><span>17 half-built ideas in your notes app, none of them live.</span></li>
+      <li><span class="x">&times;</span><span>You open the laptop to "start" and lose three hours to research that goes nowhere.</span></li>
+      <li><span class="x">&times;</span><span>Every launch waits for the version of you that has it all figured out. That version never shows up.</span></li>
+      <li><span class="x">&times;</span><span>You work best in bursts, but nothing you've tried is built for how your brain actually runs.</span></li>
+    </ul>
+  </div>
+
+  <!-- 03 HOW IT WORKS -->
+  <div class="section">
+    <div class="eyebrow">// How the sprint works</div>
+    <h2>Three days. One push. A real launch at the end.</h2>
+    <div class="timeline">
+      <div class="step">
+        <div class="rail"><div class="num">D1</div><div class="line"></div></div>
+        <div class="body"><h3><span>Day 1 &middot; Friday</span>Lock the idea</h3><p>No more 17 tabs. Pick one idea, pressure-test it, and commit. You leave Day 1 knowing exactly what you're building and who it's for.</p></div>
+      </div>
+      <div class="step">
+        <div class="rail"><div class="num">D2</div><div class="line"></div></div>
+        <div class="body"><h3><span>Day 2 &middot; Saturday</span>Build the funnel</h3><p>Landing page, offer, and the path from stranger to buyer. By end of day you have something a real person can click and pay for.</p></div>
+      </div>
+      <div class="step">
+        <div class="rail"><div class="num">D3</div></div>
+        <div class="body"><h3><span>Day 3 &middot; Sunday</span>Do the outreach</h3><p>The part everyone skips. You send your first real outreach and get your offer in front of actual humans before the 72 hours run out.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 THE OUTCOME -->
+  <div class="section">
+    <div class="eyebrow">// What you walk away with</div>
+    <h2>Not motivation. Assets.</h2>
+    <div class="outcomes">
+      <div class="outcome"><span class="ck">&#9656;</span><p><b>A validated idea</b><span>One offer you actually committed to, not a list of maybes.</span></p></div>
+      <div class="outcome"><span class="ck">&#9656;</span><p><b>A live funnel</b><span>A working landing page and offer people can buy.</span></p></div>
+      <div class="outcome"><span class="ck">&#9656;</span><p><b>First outreach sent</b><span>Real conversations started, not "someday" plans.</span></p></div>
+      <div class="outcome"><span class="ck">&#9656;</span><p><b>Proof you can finish</b><span>The single most valuable thing for a founder who keeps stalling.</span></p></div>
     </div>
 
-    <div class="card reveal r3" id="formCard">
+    <div style="margin-top:28px;">
+      <div class="eyebrow">// The incentive</div>
+      <div class="prize-box">
+        <div class="amt">&#8377;10,000</div>
+        <p>The triad with the highest combined score by Sunday night wins. Each member takes home an equal share.</p>
+        <div class="triad-row">
+          <span class="triad-chip">&#8377;3,333 &middot; MEMBER 1</span>
+          <span class="triad-chip">&#8377;3,333 &middot; MEMBER 2</span>
+          <span class="triad-chip">&#8377;3,334 &middot; MEMBER 3</span>
+        </div>
+        <div class="prize-note">Free to enter &middot; Everyone walks away with a live offer either way.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 FIT CHECK -->
+  <div class="section">
+    <div class="eyebrow">// Is this you?</div>
+    <h2>Built for founders who move in bursts.</h2>
+    <div class="fit">
+      <div class="col yes"><h4>This is for you if</h4><ul>
+        <li><span style="color:var(--sage)">&#10003;</span> You have ideas but struggle to ship</li>
+        <li><span style="color:var(--sage)">&#10003;</span> You work best with a deadline and momentum</li>
+        <li><span style="color:var(--sage)">&#10003;</span> You want a real launch, not another course</li>
+      </ul></div>
+      <div class="col no"><h4>Skip it if</h4><ul>
+        <li>&times; You want passive theory to watch later</li>
+        <li>&times; You're not free across the weekend</li>
+        <li>&times; You'd rather plan for six more months</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <!-- 06 SIGN UP FORM -->
+  <div class="section">
+    <div class="card" id="formCard">
       <div class="card-title">Claim your free spot</div>
       <div class="card-sub">Takes 30 seconds. No payment to join.</div>
+
       <div class="field">
         <label for="name">Name</label>
         <input type="text" id="name" autocomplete="name" placeholder="Your name">
         <div class="err" id="err-name">Enter your name</div>
       </div>
+
       <div class="field">
         <label for="email">Email</label>
         <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@email.com">
         <div class="err" id="err-email">Enter a valid email</div>
       </div>
+
       <div class="field">
         <label for="phone">WhatsApp number</label>
         <div class="phone-row">
@@ -174,7 +322,8 @@
         </div>
         <div class="err" id="err-phone">Enter a valid 10-digit number</div>
       </div>
-      <div class="field" style="margin-bottom:8px;">
+
+      <div class="field" style="margin-bottom:0;">
         <label>When do you build best?</label>
         <div class="chrono-grid" id="chrono">
           <div class="chrono" data-value="early_bird"><span class="emoji">&#127749;</span><span class="name">Early Bird</span><span class="time">Before 9 AM</span></div>
@@ -183,136 +332,117 @@
         </div>
         <div class="err" id="err-chrono">Pick one</div>
       </div>
-      <button class="btn btn-primary" id="submitBtn" style="margin-top:6px;">Claim my free spot &rarr;</button>
-      <p class="submit-note">No payment to join the free sprint.</p>
-    </div>
 
-    <div class="section">
-      <div class="eyebrow">Sound familiar?</div>
-      <h2>You don't have an idea problem. You have a <em>finishing</em> problem.</h2>
-      <ul class="pain">
-        <li><span class="x">&times;</span><span>17 half-built ideas in your notes app, none of them live.</span></li>
-        <li><span class="x">&times;</span><span>You open the laptop to "start" and lose three hours to research that goes nowhere.</span></li>
-        <li><span class="x">&times;</span><span>Every launch waits for the version of you that has it all figured out. That version never shows up.</span></li>
-        <li><span class="x">&times;</span><span>You work best in bursts, but nothing you've tried is built for how your brain actually runs.</span></li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <div class="eyebrow">How the sprint works</div>
-      <h2>Three days. One push. A real launch at the end.</h2>
-      <div class="timeline">
-        <div class="step"><div class="rail"><div class="num">D1</div><div class="line"></div></div><div class="body"><h3><span>Day 1 &middot; Friday</span>Lock the idea</h3><p>No more 17 tabs. Pick one idea, pressure-test it, and commit. You leave Day 1 knowing exactly what you're building and who it's for.</p></div></div>
-        <div class="step"><div class="rail"><div class="num">D2</div><div class="line"></div></div><div class="body"><h3><span>Day 2 &middot; Saturday</span>Build the funnel</h3><p>Landing page, offer, and the path from stranger to buyer. By the end of the day you have something a real person can actually click and pay for.</p></div></div>
-        <div class="step"><div class="rail"><div class="num">D3</div></div><div class="body"><h3><span>Day 3 &middot; Sunday</span>Do the outreach</h3><p>The part everyone skips. You send your first real outreach and get your offer in front of actual humans before the 72 hours run out.</p></div></div>
+      <!-- order bump checkbox -->
+      <div style="margin-top:18px;">
+        <div class="bump-check" id="bumpCheck">
+          <div class="bump-check-row">
+            <div class="bump-checkbox"><span class="tick">&#10003;</span></div>
+            <div class="bump-label">
+              <div class="bump-tag">Optional upgrade</div>
+              <strong>Yes — add the AI tool to skip the blank page</strong>
+              <p>AI builds your copy, pricing, and outreach for you inside the sprint. Zero blank-page paralysis. Sprint founders only.</p>
+              <div class="price"><span class="strike">&#8377;3,799</span> <span class="now">&#8377;499</span> <span class="save">&middot; Save &#8377;3,300</span></div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="section">
-      <div class="eyebrow">What you walk away with</div>
-      <h2>Not motivation. Assets.</h2>
-      <div class="outcomes">
-        <div class="outcome"><span class="ck">&#9656;</span><p><b>A validated idea</b><span>One offer you actually committed to, not a list of maybes.</span></p></div>
-        <div class="outcome"><span class="ck">&#9656;</span><p><b>A live funnel</b><span>A working landing page and offer people can buy.</span></p></div>
-        <div class="outcome"><span class="ck">&#9656;</span><p><b>First outreach sent</b><span>Real conversations started, not "someday" plans.</span></p></div>
-        <div class="outcome"><span class="ck">&#9656;</span><p><b>Proof you can finish</b><span>The single most valuable thing for a founder who keeps stalling.</span></p></div>
-      </div>
+      <button class="btn btn-primary" id="submitBtn" style="margin-top:16px;">Claim my free spot &rarr;</button>
+      <p class="submit-note" id="submitNote">No payment to join the free sprint.</p>
     </div>
+  </div>
 
-    <div class="section">
-      <div class="eyebrow">The incentive</div>
-      <div class="prize-box">
-        <div class="amt">&#8377;10,000</div>
-        <p>The founder who ships the strongest launch by Sunday night takes the prize. Free to enter. Everyone walks away with a live offer either way.</p>
-      </div>
+  <!-- 07 FAQ -->
+  <div class="section">
+    <div class="eyebrow">// Before you ask</div>
+    <h2>Quick questions.</h2>
+    <div class="faq">
+      <details class="qa"><summary>Is it really free? <span class="plus">+</span></summary><p>Yes. The sprint is 100% free. There's an optional &#8377;499 AI tool upgrade inside the sign-up form, but you can complete the full sprint and compete for the &#8377;10,000 prize without it.</p></details>
+      <details class="qa"><summary>What's a triad? <span class="plus">+</span></summary><p>You're matched with 2 other founders after signing up. Your triad score is the sum of all 3 members' points. The triad with the highest combined score wins &#8377;3,333 each.</p></details>
+      <details class="qa"><summary>What if I don't have an idea yet? <span class="plus">+</span></summary><p>Day 1 is built to solve exactly this. You'll run a structured audit to surface ideas from your own life, then pick and validate one before Day 2 starts.</p></details>
+      <details class="qa"><summary>How much time does it take? <span class="plus">+</span></summary><p>3 to 4 focused hours per day. Designed for sprint-style, burst-focused work, not marathon sessions.</p></details>
+      <details class="qa"><summary>Where does it happen? <span class="plus">+</span></summary><p>Fully virtual. You'll get daily PDFs (free tier) or access to the AI tool (paid upgrade), plus WhatsApp nudges to keep you on track.</p></details>
     </div>
+  </div>
 
-    <div class="section">
-      <div class="eyebrow">Is this you?</div>
-      <h2>Built for founders who move in bursts.</h2>
-      <div class="fit">
-        <div class="col yes"><h4>This is for you if</h4><ul>
-          <li><span style="color:var(--sage)">&#10003;</span> You have ideas but struggle to ship</li>
-          <li><span style="color:var(--sage)">&#10003;</span> You work best with a deadline and momentum</li>
-          <li><span style="color:var(--sage)">&#10003;</span> You want a real launch, not another course</li>
-        </ul></div>
-        <div class="col no"><h4>Skip it if</h4><ul>
-          <li>&times; You want passive theory to watch later</li>
-          <li>&times; You're not free across the weekend</li>
-          <li>&times; You'd rather plan for six more months</li>
-        </ul></div>
-      </div>
-    </div>
+  <button class="btn btn-primary" id="submitBtn2" style="margin-top:24px;">Claim my free spot &rarr;</button>
+  <p class="submit-note">Cohort 02 &middot; Starts Friday 9 AM IST &middot; Free entry</p>
 
-    <div class="section">
-      <div class="eyebrow">Optional upgrade</div>
-      <div class="bump" id="bumpCard">
-        <div class="tag">For founders who want speed</div>
-        <h3>Skip the manual work. Get the AI tool. &#8377;499.</h3>
-        <p>Same sprint, zero blank-page paralysis. AI builds your copy, pricing and outreach for you. Sprint founders only. <span class="price-strike">&#8377;3,799</span> <span class="price-now">&#8377;499</span>. Fully optional. The sprint is free with or without it.</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="eyebrow">Before you ask</div>
-      <h2>Quick questions.</h2>
-      <div class="faq">
-        <details class="qa"><summary>Is it really free? <span class="plus">+</span></summary><p>Yes. The 72-hour sprint is free to enter. The &#8377;499 AI tool is a completely optional upgrade. You can run the whole sprint and compete for the prize without it.</p></details>
-        <details class="qa"><summary>What if I don't have an idea yet? <span class="plus">+</span></summary><p>Perfect starting point. Day 1 is built to take you from scattered to one committed idea. You don't need to arrive with anything but the willingness to ship.</p></details>
-        <details class="qa"><summary>How much time does it take? <span class="plus">+</span></summary><p>It runs across the weekend in focused bursts, not all-day lectures. You move at your own pace within the 72-hour window. That's why we ask your chronotype.</p></details>
-        <details class="qa"><summary>Where does it happen? <span class="plus">+</span></summary><p>Fully virtual. Once you sign up you'll get the WhatsApp group link with everything you need.</p></details>
-      </div>
-    </div>
-
-    <button class="btn btn-primary" id="submitBtn2" style="margin-top:20px;">Claim my free spot &rarr;</button>
-    <p class="submit-note">Cohort 02 &middot; Starts Friday 9 AM IST &middot; Free entry</p>
+  <!-- FOOTER -->
+  <div class="footer">
     <div class="footer-src">src: <span id="srcLabel">ig01</span></div>
+    <div class="footer-info">WiredToLaunch &middot; MSME Registered &middot; <a href="mailto:hello@wiredtolaunch.in">hello@wiredtolaunch.in</a></div>
   </div>
 
-  <div class="sticky-cta" id="stickyCta">
-    <div class="inner">
-      <div class="label"><b>Free 72-Hour Sprint</b><span>Starts Friday 9 AM &middot; &#8377;10,000 prize</span></div>
-      <button class="btn btn-primary" id="stickyBtn">Claim spot &rarr;</button>
-    </div>
-  </div>
+</div><!-- /wrap -->
 
-  <div class="interstitial" id="interstitial">
-    <div class="inter-inner">
-      <div class="inter-badge">&#10003; You're in. Spot reserved.</div>
-      <h2>Want the AI tool to do the heavy lifting?</h2>
-      <p class="idesc">Same sprint, zero blank-page paralysis. AI builds your copy, pricing and outreach for you. Sprint founders only.</p>
-      <p class="iprice"><span class="strike">&#8377;3,799</span> &nbsp;<span class="now">&#8377;499</span></p>
-      <button class="btn btn-sage" id="upgradeBtn">Yes, upgrade for &#8377;499 &rarr;</button>
-      <button class="btn btn-ghost" id="freeBtn">I'll do it manually, continue free</button>
-      <div class="placeholder-flag" id="phFlag">&#9888; Redirect links are placeholders. Live links wired before go-live.</div>
-    </div>
+<!-- sticky cta -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="inner">
+    <div class="label"><b>Free 72-Hour Sprint</b><span>Starts Friday 9 AM &middot; &#8377;10,000 prize pool</span></div>
+    <button class="btn btn-primary" id="stickyBtn">Claim spot &rarr;</button>
   </div>
+</div>
+
+<!-- post-submit interstitial (paid path only — free path skips this) -->
+<div class="interstitial" id="interstitial">
+  <div class="inter-inner">
+    <div class="inter-badge">&#10003; You're in. Spot reserved.</div>
+    <h2>Complete your AI tool upgrade</h2>
+    <p class="idesc">AI builds your copy, pricing, and outreach for you inside the sprint. Zero blank-page paralysis.</p>
+    <p class="iprice"><span class="strike">&#8377;3,799</span> &nbsp;<span class="now">&#8377;499</span></p>
+    <button class="btn btn-sage" id="upgradeBtn">Pay &#8377;499 and get access &rarr;</button>
+    <button class="btn btn-ghost" id="skipUpgradeBtn">Skip for now, just join free</button>
+    <div class="placeholder-flag" id="phFlag">&#9888; Redirect links are placeholders. Live links wired before go-live.</div>
+  </div>
+</div>
 
 <script>
+  // src detection
   const SRC_MAP = {
     "launchbrained.live":"ig01","onelaunchaway.live":"ig02","sprintandlaunch.live":"ig03",
     "theadhdfounders.live":"ig04","wiredtolaunch.live":"ig05"
   };
-  function detectSrc(){ const host=location.hostname.replace(/^www\./,""); return SRC_MAP[host]||"ig01"; }
-  const SRC = detectSrc();
+  const SRC = SRC_MAP[location.hostname.replace(/^www\./,"")] || "ig01";
   document.getElementById("srcLabel").textContent = SRC;
 
-  // Placeholder redirect URLs — replace before go-live
+  // placeholder redirect URLs — replace before go-live
   const WHATSAPP_GROUP_URL = "#PLACEHOLDER_WHATSAPP_GROUP";
-  const COSMOFEED_URL = "#PLACEHOLDER_COSMOFEED_499";
+  const COSMOFEED_URL      = "#PLACEHOLDER_COSMOFEED_499";
 
+  // chronotype
   let chronotype = null;
-  const chronoCards = document.querySelectorAll(".chrono");
-  chronoCards.forEach(card => {
+  document.querySelectorAll(".chrono").forEach(card => {
     card.addEventListener("click", () => {
-      chronoCards.forEach(c => c.classList.remove("selected"));
+      document.querySelectorAll(".chrono").forEach(c => c.classList.remove("selected"));
       card.classList.add("selected");
       chronotype = card.dataset.value;
       document.getElementById("err-chrono").classList.remove("show");
     });
   });
 
-  const nameEl = document.getElementById("name");
+  // order bump toggle
+  let bumpSelected = false;
+  const bumpCheck   = document.getElementById("bumpCheck");
+  const submitBtn   = document.getElementById("submitBtn");
+  const submitBtn2  = document.getElementById("submitBtn2");
+  const submitNote  = document.getElementById("submitNote");
+
+  bumpCheck.addEventListener("click", () => {
+    bumpSelected = !bumpSelected;
+    bumpCheck.classList.toggle("checked", bumpSelected);
+    if (bumpSelected) {
+      submitBtn.textContent  = "Claim my spot + AI tool → ₹499";
+      submitNote.textContent = "Sprint is free · AI tool billed at ₹499";
+    } else {
+      submitBtn.textContent  = "Claim my free spot →";
+      submitNote.textContent = "No payment to join the free sprint.";
+    }
+  });
+
+  // validation
+  const nameEl  = document.getElementById("name");
   const emailEl = document.getElementById("email");
   const phoneEl = document.getElementById("phone");
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -329,7 +459,7 @@
 
   function validate() {
     let ok = true;
-    if (!nameEl.value.trim()) { setErr(nameEl,"err-name",true); ok=false; } else setErr(nameEl,"err-name",false);
+    if (!nameEl.value.trim())               { setErr(nameEl,"err-name",true);  ok=false; } else setErr(nameEl,"err-name",false);
     if (!emailRe.test(emailEl.value.trim())) { setErr(emailEl,"err-email",true); ok=false; } else setErr(emailEl,"err-email",false);
     if (!phoneRe.test(phoneEl.value.trim())) { setErr(phoneEl,"err-phone",true); ok=false; } else setErr(phoneEl,"err-phone",false);
     if (!chronotype) { document.getElementById("err-chrono").classList.add("show"); ok=false; }
@@ -342,36 +472,36 @@
       return;
     }
 
-    const submitBtn = document.getElementById("submitBtn");
-    const submitBtn2 = document.getElementById("submitBtn2");
-    submitBtn.disabled = true;
+    submitBtn.disabled  = true;
     submitBtn2.disabled = true;
+    const orig = submitBtn.textContent;
     submitBtn.textContent = "Saving your spot...";
 
     const payload = {
-      name: nameEl.value.trim(),
-      email: emailEl.value.trim(),
-      phone: "+91" + phoneEl.value.trim(),
+      name:      nameEl.value.trim(),
+      email:     emailEl.value.trim(),
+      phone:     "+91" + phoneEl.value.trim(),
       chronotype: chronotype,
-      src: SRC,
-      paid: false,
-      ref: null,
+      src:       SRC,
+      paid:      false,
+      ref:       null,
       userAgent: navigator.userAgent
-      // created_at added server-side via serverTimestamp()
+      // created_at: serverTimestamp() — added server-side
     };
 
-    try {
-      // Firestore write — wired after template approval
-      // await writeToFirestore("registrations", payload);
-      console.log("[WTL] registration payload (Firestore write pending approval):", payload);
-    } catch(e) {
-      console.error("[WTL] Firestore write failed:", e);
-    }
+    // Firestore write — wired after template approval
+    // await writeToFirestore("registrations", payload);
+    console.log("[WTL] registration payload:", payload);
 
-    showInterstitial();
-    submitBtn.disabled = false;
+    submitBtn.disabled  = false;
     submitBtn2.disabled = false;
-    submitBtn.textContent = "Claim my free spot →";
+    submitBtn.textContent = orig;
+
+    if (bumpSelected) {
+      showInterstitial();
+    } else {
+      safeRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group");
+    }
   }
 
   document.getElementById("submitBtn").addEventListener("click", handleSubmit);
@@ -380,38 +510,50 @@
     document.getElementById("formCard").scrollIntoView({behavior:"smooth", block:"start"});
   });
 
+  // interstitial (paid path only)
   function showInterstitial() {
-    const el = document.getElementById("interstitial");
-    el.classList.add("show");
+    document.getElementById("interstitial").classList.add("show");
     document.body.style.overflow = "hidden";
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   }
-
   document.getElementById("upgradeBtn").addEventListener("click", () => safeRedirect(COSMOFEED_URL, "PAID / Cosmofeed"));
-  document.getElementById("freeBtn").addEventListener("click", () => safeRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group"));
+  document.getElementById("skipUpgradeBtn").addEventListener("click", () => {
+    document.getElementById("interstitial").classList.remove("show");
+    document.body.style.overflow = "";
+    safeRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group");
+  });
 
   function safeRedirect(url, label) {
     if (url.startsWith("#PLACEHOLDER")) {
       const flag = document.getElementById("phFlag");
-      flag.textContent = "→ would redirect to: " + label + "  (placeholder — not live yet)";
-      flag.style.color = "#62bfa1";
-      flag.style.borderColor = "rgba(98,191,161,0.3)";
-      flag.style.background = "rgba(98,191,161,0.06)";
+      if (flag) {
+        flag.textContent = "→ would redirect to: " + label + " (placeholder)";
+        flag.style.color = "#62bfa1";
+        flag.style.borderColor = "rgba(98,191,161,0.3)";
+        flag.style.background  = "rgba(98,191,161,0.06)";
+      }
+      // for free path redirect outside interstitial, show a brief visual cue
+      if (!document.getElementById("interstitial").classList.contains("show")) {
+        const btn = document.getElementById("submitBtn");
+        const orig = btn.textContent;
+        btn.textContent = "→ redirecting... (placeholder)";
+        setTimeout(() => { btn.textContent = orig; }, 2000);
+      }
       return;
     }
     window.location.href = url;
   }
 
-  // Sticky CTA: show after form card scrolls out of view upward
-  const formCard = document.getElementById("formCard");
-  const sticky = document.getElementById("stickyCta");
-  const obs = new IntersectionObserver((entries) => {
+  // sticky CTA — show after form scrolls above viewport
+  const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
-      if (!e.isIntersecting && e.boundingClientRect.top < 0) sticky.classList.add("show");
-      else sticky.classList.remove("show");
+      if (!e.isIntersecting && e.boundingClientRect.top < 0)
+        document.getElementById("stickyCta").classList.add("show");
+      else
+        document.getElementById("stickyCta").classList.remove("show");
     });
-  }, {threshold: 0});
-  obs.observe(formCard);
+  }, {threshold:0});
+  obs.observe(document.getElementById("formCard"));
 </script>
 </body>
 </html>
