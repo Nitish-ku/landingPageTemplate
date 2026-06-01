@@ -45,9 +45,9 @@
   .chip b { color:var(--sage); }
 
   /* hero status line */
-  .hero-status-line { display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; margin-bottom:28px; overflow:hidden; }
-  .hero-status-dot { width:6px; height:6px; border-radius:50%; background:#4ade80; flex:0 0 auto; box-shadow:0 0 6px #4ade80; animation:pulse 1.8s infinite; }
-  .hero-status-text { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:0.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hero-status-line { display:flex; align-items:flex-start; gap:8px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; margin-bottom:0; }
+  .hero-status-dot { width:6px; height:6px; border-radius:50%; background:#4ade80; flex:0 0 auto; box-shadow:0 0 6px #4ade80; animation:pulse 1.8s infinite; margin-top:3px; }
+  .hero-status-text { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:0.4px; line-height:1.6; word-break:break-word; }
 
   /* sections */
   .section { padding:72px 0 72px; }
@@ -224,7 +224,7 @@
   </div>
 
   <!-- 02 THE PROBLEM -->
-  <div class="section">
+  <div class="section" style="padding-top:48px;">
     <div class="eyebrow">// Sound familiar?</div>
     <h2>You don't have an idea problem. You have a <em>finishing</em> problem.</h2>
     <ul class="pain">
