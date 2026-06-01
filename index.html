@@ -100,7 +100,7 @@
   .fit .col.no li { color:var(--muted); }
 
   /* form card */
-  .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px 20px; margin-bottom:16px; }
+  .card { background:#1a1f26; border:1px solid #2a3140; border-radius:var(--radius); padding:22px 20px; margin-bottom:16px; box-shadow:0 0 0 1px rgba(88,147,234,0.06), 0 8px 32px rgba(0,0,0,0.4); }
   .card-title { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
   .card-sub { font-size:13px; color:var(--muted); margin-bottom:18px; }
   .field { margin-bottom:16px; }
@@ -350,9 +350,9 @@
             <div class="bump-checkbox"><span class="tick">&#10003;</span></div>
             <div class="bump-label">
               <div class="bump-tag">Optional upgrade</div>
-              <strong>Yes — add the AI tool to skip the blank page</strong>
-              <p>AI builds your copy, pricing, and outreach for you inside the sprint. Zero blank-page paralysis. Sprint founders only.</p>
-              <div class="price"><span class="strike">&#8377;3,799</span> <span class="now">&#8377;499</span> <span class="save">&middot; Save &#8377;3,300</span></div>
+              <strong>Add Sprint Copilot (&#8377;499)</strong>
+              <p>Skip the blank-page paralysis. Let Sprint Copilot generate your landing page copy, pricing model, and outreach scripts for you in seconds. Sprint founders only. Normally &#8377;3,799.</p>
+              <div class="price"><span class="now">&#8377;499</span> <span class="save">&middot; Save &#8377;3,300</span></div>
             </div>
           </div>
         </div>
@@ -399,8 +399,8 @@
 <div class="interstitial" id="interstitial">
   <div class="inter-inner">
     <div class="inter-badge">&#10003; You're in. Spot reserved.</div>
-    <h2>Complete your AI tool upgrade</h2>
-    <p class="idesc">AI builds your copy, pricing, and outreach for you inside the sprint. Zero blank-page paralysis.</p>
+    <h2>Add Sprint Copilot to your spot</h2>
+    <p class="idesc">Skip the blank-page paralysis. Sprint Copilot generates your landing page copy, pricing model, and outreach scripts in seconds.</p>
     <p class="iprice"><span class="strike">&#8377;3,799</span> &nbsp;<span class="now">&#8377;499</span></p>
     <button class="btn btn-sage" id="upgradeBtn">Pay &#8377;499 and get access &rarr;</button>
     <button class="btn btn-ghost" id="skipUpgradeBtn">Skip for now, just join free</button>
@@ -442,8 +442,8 @@
     bumpSelected = !bumpSelected;
     bumpCheck.classList.toggle("checked", bumpSelected);
     if (bumpSelected) {
-      submitBtn.textContent  = "Claim my spot + AI tool → ₹499";
-      submitNote.textContent = "Sprint is free · AI tool billed at ₹499";
+      submitBtn.textContent  = "Claim my spot + Sprint Copilot → ₹499";
+      submitNote.textContent = "Sprint is free · Sprint Copilot billed at ₹499";
     } else {
       submitBtn.textContent  = "Claim my free spot →";
       submitNote.textContent = "No payment to join the free sprint.";
