@@ -44,6 +44,12 @@
   .chip { font-family:var(--font-mono); font-size:11px; letter-spacing:0.5px; color:var(--text); background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:7px 11px; display:flex; align-items:center; gap:6px; }
   .chip b { color:var(--sage); }
 
+  /* countdown bar */
+  .countdown-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; background:linear-gradient(135deg, rgba(74,93,255,0.12), rgba(74,93,255,0.06)); border:1px solid rgba(74,93,255,0.25); border-radius:var(--radius); padding:12px 16px; margin-bottom:16px; }
+  .countdown-label { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
+  .countdown-timer { font-family:var(--font-mono); font-size:20px; font-weight:600; color:#fff; letter-spacing:1px; }
+  .countdown-sub { font-family:var(--font-mono); font-size:10px; color:var(--muted); margin-left:auto; }
+
   /* hero status line */
   .hero-status-line { display:flex; align-items:flex-start; gap:8px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; margin-bottom:0; }
   .hero-status-dot { width:6px; height:6px; border-radius:50%; background:#4ade80; flex:0 0 auto; box-shadow:0 0 6px #4ade80; animation:pulse 1.8s infinite; margin-top:3px; }
@@ -217,6 +223,13 @@
     <span class="chip">&#128205; Virtual</span>
   </div>
 
+  <!-- countdown timer -->
+  <div class="countdown-bar reveal r3" id="countdownBar">
+    <span class="countdown-label">Sprint starts in</span>
+    <span class="countdown-timer" id="countdownTimer">--d --h --m</span>
+    <span class="countdown-sub">Spots close Friday 8 AM IST</span>
+  </div>
+
   <!-- hero card — single status line above headline -->
   <div class="hero-status-line reveal r3">
     <span class="hero-status-dot"></span>
@@ -331,6 +344,7 @@
           <input type="tel" id="phone" inputmode="numeric" autocomplete="tel" placeholder="10-digit number" maxlength="10">
         </div>
         <div class="err" id="err-phone">Enter a valid 10-digit number</div>
+        <div style="font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:6px; letter-spacing:0.3px;">WhatsApp only. We send daily PDFs here. No calls, no spam.</div>
       </div>
 
       <div class="field" style="margin-bottom:0;">
@@ -408,6 +422,43 @@
 </div>
 
 <script>
+  // countdown timer — targets next Friday 9:00 AM IST (UTC+5:30)
+  function getNextFriday9AM() {
+    const now = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const nowIST = new Date(now.getTime() + istOffset);
+    const day = nowIST.getUTCDay(); // 0=Sun, 5=Fri
+    const daysUntilFri = (5 - day + 7) % 7 || 7; // if today is Friday past 9AM, next Friday
+    const target = new Date(Date.UTC(
+      nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate() + daysUntilFri,
+      3, 30, 0 // 9:00 AM IST = 03:30 UTC
+    ));
+    // if today is Friday and before 9AM IST, use today
+    if (day === 5) {
+      const todayFri = new Date(Date.UTC(
+        nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate(), 3, 30, 0
+      ));
+      if (now < todayFri) return todayFri;
+    }
+    return target;
+  }
+  function updateCountdown() {
+    const target = getNextFriday9AM();
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      document.getElementById("countdownTimer").textContent = "Live now!";
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById("countdownTimer").textContent =
+      (d > 0 ? d + "d " : "") + h + "h " + m + "m " + s + "s";
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
   // src detection
   const SRC_MAP = {
     "launchbrained.live":"ig01","onelaunchaway.live":"ig02","sprintandlaunch.live":"ig03",
