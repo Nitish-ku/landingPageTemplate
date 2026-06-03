@@ -1,1 +1,6 @@
 .claude/
+node_modules/
+package.json
+package-lock.json
+generate-templates-doc.js
+*.docx

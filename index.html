@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,409 +8,864 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#0f1115; --surface:#161a1f; --border:#1e2329; --text:#e2e8f0; --muted:#94a3b8;
-    --sage:#62bfa1; --blue:#4a5dff; --radius:4px;
-    --font-head:'Space Grotesk',sans-serif; --font-mono:'IBM Plex Mono',monospace;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html { scroll-behavior:smooth; }
-  body {
-    background:var(--bg); color:var(--text); font-family:var(--font-head); line-height:1.5;
-    min-height:100vh; padding-bottom:84px;
-    background-image:
-      radial-gradient(900px 520px at 50% -8%, rgba(98,191,161,0.09), transparent 60%),
-      radial-gradient(680px 420px at 100% 12%, rgba(88,147,234,0.07), transparent 55%);
-    background-attachment:fixed;
-  }
-  .wrap { max-width:460px; margin:0 auto; padding:0 20px; }
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:         #f5f0eb;
+  --surface:    #ffffff;
+  --border:     #e5ddd4;
+  --text:       #1c1917;
+  --muted:      #78716c;
+  --sage:       #2a8f72;
+  --sage-soft:  rgba(42,143,114,0.10);
+  --blue:       #4a5dff;
+  --blue-soft:  rgba(74,93,255,0.08);
+  --red:        #dc4f55;
+  --dark-sec:   #1a1614;
+  --radius:     6px;
+  --shadow:     0 2px 16px rgba(0,0,0,0.07);
+  --font-head:  'Space Grotesk', sans-serif;
+  --font-mono:  'IBM Plex Mono', monospace;
+}
+[data-theme="dark"] {
+  --bg:         #0f1115;
+  --surface:    #161a1f;
+  --border:     #1e2329;
+  --text:       #e2e8f0;
+  --muted:      #94a3b8;
+  --sage:       #62bfa1;
+  --sage-soft:  rgba(98,191,161,0.10);
+  --blue:       #4a5dff;
+  --blue-soft:  rgba(74,93,255,0.12);
+  --red:        #e0686d;
+  --dark-sec:   #0a0c0e;
+  --shadow:     0 8px 32px rgba(0,0,0,0.4);
+}
 
-  /* topbar */
-  .topbar { display:flex; align-items:center; gap:8px; padding:20px 0 26px; }
-  .dot { width:8px; height:8px; border-radius:50%; background:var(--sage); box-shadow:0 0 10px var(--sage); }
-  .brandtag { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+/* ─── RESET ──────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-head);
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background 0.25s, color 0.25s;
+  padding-bottom: 84px;
+}
+@media(min-width:768px){ body { padding-bottom:0; } }
 
-  /* badge */
-  .badge { display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--sage); border:1px solid var(--border); background:var(--surface); padding:7px 12px; border-radius:var(--radius); margin-bottom:22px; }
-  .badge .pulse { width:6px; height:6px; border-radius:50%; background:var(--sage); animation:pulse 1.8s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+/* ─── LAYOUT ─────────────────────────────────────────── */
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
 
-  /* hero */
-  h1 { font-size:38px; line-height:1.08; font-weight:700; letter-spacing:-0.7px; margin-bottom:18px; }
-  h1 .free { color:var(--sage); }
-  .sub { font-size:16.5px; color:var(--muted); line-height:1.55; margin-bottom:18px; }
-  .sub strong { color:var(--text); font-weight:600; }
-  .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px; }
-  .chip { font-family:var(--font-mono); font-size:11px; letter-spacing:0.5px; color:var(--text); background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:7px 11px; display:flex; align-items:center; gap:6px; }
-  .chip b { color:var(--sage); }
+/* full-bleed section with inner wrap */
+.section-light { background: var(--bg); }
+.section-dark  { background: var(--dark-sec); }
 
-  /* countdown bar */
-  .countdown-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; background:linear-gradient(135deg, rgba(74,93,255,0.12), rgba(74,93,255,0.06)); border:1px solid rgba(74,93,255,0.25); border-radius:var(--radius); padding:12px 16px; margin-bottom:16px; }
-  .countdown-label { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
-  .countdown-timer { font-family:var(--font-mono); font-size:20px; font-weight:600; color:#fff; letter-spacing:1px; }
-  .countdown-sub { font-family:var(--font-mono); font-size:10px; color:var(--muted); margin-left:auto; }
+/* ─── TOPBAR ─────────────────────────────────────────── */
+.topbar {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 22px 0 0;
+}
+.topbar-left { display:flex; align-items:center; gap:8px; }
+.dot { width:8px; height:8px; border-radius:50%; background:var(--sage); box-shadow:0 0 10px var(--sage); }
+.brandtag { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+.theme-toggle {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); padding:6px 11px; cursor:pointer;
+  font-size:14px; color:var(--muted); transition:border-color .2s;
+}
+.theme-toggle:hover { border-color:var(--sage); }
 
-  /* hero status line */
-  .hero-status-line { display:flex; align-items:flex-start; gap:8px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; margin-bottom:0; }
-  .hero-status-dot { width:6px; height:6px; border-radius:50%; background:#4ade80; flex:0 0 auto; box-shadow:0 0 6px #4ade80; animation:pulse 1.8s infinite; margin-top:3px; }
-  .hero-status-text { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:0.4px; line-height:1.6; word-break:break-word; }
+/* ─── HERO ───────────────────────────────────────────── */
+.hero-section {
+  background-image:
+    radial-gradient(ellipse 700px 500px at 5% 0%, rgba(42,143,114,0.09), transparent 60%),
+    radial-gradient(ellipse 600px 400px at 95% 5%, rgba(74,93,255,0.07), transparent 55%);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  padding: 32px 0 64px;
+}
+@media(min-width:768px){
+  .hero-grid { grid-template-columns: 1.1fr 0.9fr; gap:64px; padding:52px 0 80px; align-items:start; }
+}
 
-  /* sections */
-  .section { padding:56px 0 0; }
-  .eyebrow { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--sage); margin-bottom:12px; }
-  .section h2 { font-size:25px; line-height:1.18; font-weight:700; letter-spacing:-0.4px; margin-bottom:28px; }
+.badge { display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--sage); border:1px solid var(--border); background:var(--surface); padding:7px 13px; border-radius:var(--radius); margin-bottom:28px; }
+.badge .pulse { width:6px; height:6px; border-radius:50%; background:var(--sage); animation:pulse 1.8s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.25} }
 
-  /* problem */
-  .pain { list-style:none; margin-top:6px; }
-  .pain li { display:flex; gap:11px; align-items:flex-start; padding:16px 0; border-bottom:1px solid var(--border); font-size:15px; color:var(--text); }
-  .pain li:last-child { border-bottom:none; }
-  .pain .x { color:#e0686d; font-family:var(--font-mono); flex:0 0 auto; margin-top:1px; }
+h1 { font-size:clamp(34px, 5vw, 56px); line-height:1.04; font-weight:700; letter-spacing:-.8px; margin-bottom:18px; }
+h1 .free { color:var(--sage); }
 
-  /* timeline */
-  .timeline { position:relative; margin-top:8px; }
-  .step { display:flex; gap:14px; padding-bottom:32px; }
-  .step:last-child { padding-bottom:0; }
-  .step .rail { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; }
-  .step .num { width:38px; height:38px; border-radius:var(--radius); background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-weight:600; font-size:13px; color:var(--sage); }
-  .step .line { width:1px; flex:1; background:var(--border); margin-top:6px; min-height:18px; }
-  .step:last-child .line { display:none; }
-  .step .body h3 { font-size:16px; font-weight:600; margin-bottom:7px; }
-  .step .body h3 span { font-family:var(--font-mono); font-size:11px; color:var(--muted); display:block; letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
-  .step .body p { font-size:14px; color:var(--muted); line-height:1.6; }
+.hero-punch { font-size:18px; color:var(--muted); line-height:1.5; margin-bottom:28px; }
+.hero-punch strong { color:var(--text); font-weight:600; }
 
-  /* outcomes */
-  .outcomes { display:grid; gap:12px; margin-top:6px; }
-  .outcome { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; display:flex; gap:12px; align-items:flex-start; }
-  .outcome .ck { color:var(--sage); font-family:var(--font-mono); flex:0 0 auto; margin-top:1px; }
-  .outcome p { font-size:14.5px; line-height:1.5; }
-  .outcome p b { display:block; font-weight:600; margin-bottom:4px; }
-  .outcome p span { color:var(--muted); font-size:13.5px; }
+.hero-meta { display:flex; align-items:center; gap:0; flex-wrap:wrap; margin-bottom:32px; }
+.hero-meta-item { font-family:var(--font-mono); font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+.hero-meta-item b { color:var(--text); font-weight:600; }
+.hero-meta-item + .hero-meta-item::before { content:'·'; margin:0 12px; color:var(--border); font-size:16px; }
 
-  /* prize */
-  .prize-box { background:linear-gradient(180deg, rgba(98,191,161,0.10), rgba(98,191,161,0.03)); border:1px solid rgba(98,191,161,0.25); border-radius:var(--radius); padding:24px 20px; text-align:center; margin-top:8px; }
-  .prize-box .amt { font-size:40px; font-weight:700; color:var(--sage); letter-spacing:-1px; line-height:1; margin-bottom:10px; }
-  .prize-box p { font-size:14px; color:var(--muted); margin-bottom:16px; }
-  .triad-row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:14px; }
-  .triad-chip { font-family:var(--font-mono); font-size:11px; letter-spacing:0.5px; color:var(--sage); background:rgba(98,191,161,0.08); border:1px solid rgba(98,191,161,0.2); border-radius:var(--radius); padding:7px 12px; }
-  .prize-note { font-family:var(--font-mono); font-size:11px; color:var(--muted); letter-spacing:0.3px; }
+.hero-social-proof { display:flex; align-items:center; gap:10px; margin-top:0; }
+.proof-pill { display:inline-flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:8px 14px; font-family:var(--font-mono); font-size:11px; color:var(--muted); }
+.proof-pill .live-dot { width:6px; height:6px; border-radius:50%; background:#4ade80; box-shadow:0 0 6px #4ade80; animation:pulse 1.8s infinite; }
+.proof-pill b { color:var(--text); }
 
-  /* fit */
-  .fit { display:grid; grid-template-columns:1fr; gap:10px; margin-top:6px; }
-  .fit .col { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
-  .fit .col h4 { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
-  .fit .col.yes h4 { color:var(--sage); }
-  .fit .col.no h4 { color:var(--muted); }
-  .fit .col ul { list-style:none; }
-  .fit .col li { font-size:14px; padding:5px 0; display:flex; gap:8px; }
-  .fit .col.yes li { color:var(--text); }
-  .fit .col.no li { color:var(--muted); }
+@media(min-width:768px){
+  .hero-form-col { position:sticky; top:76px; }
+}
 
-  /* form card */
-  .card { background:#1e2530; border:1px solid rgba(74,93,255,0.3); border-radius:var(--radius); padding:22px 20px; margin-bottom:16px; box-shadow:0 0 0 4px rgba(74,93,255,0.06), 0 12px 40px rgba(0,0,0,0.5); }
-  .card-title { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--blue); margin-bottom:6px; }
-  .card-sub { font-size:13px; color:var(--muted); margin-bottom:18px; }
-  .field { margin-bottom:16px; }
-  .field label { display:block; font-family:var(--font-mono); font-size:11px; letter-spacing:0.5px; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
-  .field input[type="text"],
-  .field input[type="email"],
-  .field input[type="tel"] {
-    width:100%; background:#12161c; border:1px solid #2e3748; border-radius:var(--radius);
-    color:var(--text); font-family:var(--font-head); font-size:16px; padding:13px 14px;
-    transition:border-color 0.2s, box-shadow 0.2s;
-  }
-  .field input::placeholder { color:#5b6675; }
-  .field input:focus { outline:none; border-color:var(--sage); box-shadow:0 0 0 3px rgba(98,191,161,0.12); }
-  .field input.invalid { border-color:#e0686d; box-shadow:0 0 0 3px rgba(224,104,109,0.10); }
-  .err { display:none; font-family:var(--font-mono); font-size:11px; color:#e0686d; margin-top:6px; }
-  .err.show { display:block; }
-  .phone-row { display:flex; gap:8px; }
-  .phone-row .cc { flex:0 0 64px; background:#12161c; border:1px solid #2e3748; border-radius:var(--radius); color:var(--muted); font-family:var(--font-mono); font-size:15px; text-align:center; display:flex; align-items:center; justify-content:center; }
-  .phone-row input { flex:1; }
+/* ─── FORM CARD ──────────────────────────────────────── */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:26px 24px; box-shadow:var(--shadow); }
+[data-theme="dark"] .card { background:#1e2530; border-color:rgba(74,93,255,.3); box-shadow:0 0 0 4px rgba(74,93,255,.06), 0 16px 48px rgba(0,0,0,.5); }
 
-  /* chronotype */
-  .chrono-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-  .chrono { background:#12161c; border:1px solid #2e3748; border-radius:var(--radius); padding:14px 6px; text-align:center; cursor:pointer; transition:border-color 0.2s, background 0.2s, transform 0.2s; user-select:none; }
-  .chrono:active { transform:scale(0.97); }
-  .chrono .emoji { font-size:24px; display:block; margin-bottom:6px; }
-  .chrono .name { font-size:13px; font-weight:600; display:block; margin-bottom:3px; }
-  .chrono .time { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:0.3px; }
-  .chrono.selected { border-color:var(--sage); background:rgba(98,191,161,0.10); }
-  .chrono.selected .name { color:var(--sage); }
+.card-title { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--blue); margin-bottom:6px; }
+.card-sub { font-size:13px; color:var(--muted); margin-bottom:20px; }
 
-  /* order bump checkbox */
-  .bump-check { background:linear-gradient(180deg, rgba(88,147,234,0.08), rgba(88,147,234,0.03)); border:1px dashed rgba(88,147,234,0.35); border-radius:var(--radius); padding:16px; margin-top:6px; margin-bottom:18px; cursor:pointer; transition:border-color 0.2s, background 0.2s; }
-  .bump-check.checked { border-color:var(--blue); background:rgba(88,147,234,0.12); }
-  .bump-check-row { display:flex; align-items:flex-start; gap:12px; }
-  .bump-checkbox { width:20px; height:20px; border:2px solid var(--border); border-radius:3px; flex:0 0 auto; margin-top:2px; display:flex; align-items:center; justify-content:center; transition:border-color 0.2s, background 0.2s; background:var(--bg); }
-  .bump-check.checked .bump-checkbox { border-color:var(--blue); background:var(--blue); }
-  .bump-checkbox .tick { display:none; color:#fff; font-size:12px; font-weight:700; }
-  .bump-check.checked .bump-checkbox .tick { display:block; }
-  .bump-label { flex:1; }
-  .bump-label .bump-tag { font-family:var(--font-mono); font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--blue); margin-bottom:4px; }
-  .bump-label strong { font-size:14.5px; font-weight:600; display:block; margin-bottom:4px; }
-  .bump-label p { font-size:13px; color:var(--muted); line-height:1.5; }
-  .bump-label .price { margin-top:6px; font-size:13px; }
-  .bump-label .price .strike { text-decoration:line-through; text-decoration-color:#e0686d; text-decoration-thickness:2px; color:#94a3b8; font-weight:500; }
-  .bump-label .price .now { color:var(--sage); font-weight:700; }
-  .bump-label .price .save { font-family:var(--font-mono); font-size:11px; color:var(--muted); }
-  .off-badge { font-family:var(--font-mono); font-size:10px; font-weight:600; letter-spacing:0.5px; background:rgba(224,104,109,0.15); color:#e0686d; border:1px solid rgba(224,104,109,0.3); border-radius:3px; padding:2px 6px; vertical-align:middle; }
+.field { margin-bottom:16px; }
+.field label { display:block; font-family:var(--font-mono); font-size:11px; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
+.field input { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); color:var(--text); font-family:var(--font-head); font-size:16px; padding:13px 15px; transition:border-color .2s, box-shadow .2s; }
+[data-theme="dark"] .field input { background:#12161c; border-color:#2e3748; }
+.field input::placeholder { color:var(--muted); opacity:.55; }
+.field input:focus { outline:none; border-color:var(--sage); box-shadow:0 0 0 3px var(--sage-soft); }
+.field input.invalid { border-color:var(--red); }
+.err { display:none; font-family:var(--font-mono); font-size:11px; color:var(--red); margin-top:5px; }
+.err.show { display:block; }
 
-  /* buttons */
-  .btn { display:block; width:100%; border:none; border-radius:var(--radius); font-family:var(--font-head); font-size:16px; font-weight:600; padding:18px; cursor:pointer; transition:filter 0.2s, transform 0.2s; }
-  .btn:active { transform:scale(0.99); }
-  .btn-primary { background:var(--blue); color:#fff; }
-  .btn-primary:hover { filter:brightness(1.08); }
-  .btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); }
-  .btn-ghost:hover { color:var(--text); border-color:var(--muted); }
-  .btn-sage { background:var(--sage); color:#0a1a14; }
-  .btn-sage:hover { filter:brightness(1.06); }
-  .submit-note { font-family:var(--font-mono); font-size:11px; color:var(--muted); text-align:center; margin-top:12px; }
+.phone-row { display:flex; gap:8px; }
+.phone-row .cc { flex:0 0 64px; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); color:var(--muted); font-family:var(--font-mono); font-size:15px; display:flex; align-items:center; justify-content:center; }
+[data-theme="dark"] .phone-row .cc { background:#12161c; border-color:#2e3748; }
+.phone-row input { flex:1; }
 
-  /* faq */
-  .faq { margin-top:6px; }
-  .qa { border-bottom:1px solid var(--border); }
-  .qa summary { cursor:pointer; list-style:none; padding:15px 0; font-size:15px; font-weight:500; display:flex; justify-content:space-between; align-items:center; gap:12px; }
-  .qa summary::-webkit-details-marker { display:none; }
-  .qa summary .plus { color:var(--sage); font-family:var(--font-mono); transition:transform 0.2s; flex:0 0 auto; }
-  .qa[open] summary .plus { transform:rotate(45deg); }
-  .qa p { font-size:14px; color:var(--muted); line-height:1.6; padding:0 0 16px; }
+.chrono-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.chrono { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:14px 6px; text-align:center; cursor:pointer; transition:border-color .2s, background .2s, transform .15s; user-select:none; }
+[data-theme="dark"] .chrono { background:#12161c; border-color:#2e3748; }
+.chrono:active { transform:scale(.97); }
+.chrono .emoji { font-size:24px; display:block; margin-bottom:6px; }
+.chrono .name { font-size:13px; font-weight:600; display:block; margin-bottom:3px; }
+.chrono .time { font-family:var(--font-mono); font-size:10px; color:var(--muted); }
+.chrono.selected { border-color:var(--sage); background:var(--sage-soft); }
+.chrono.selected .name { color:var(--sage); }
 
-  /* footer */
-  .footer { padding:40px 0 16px; border-top:1px solid var(--border); margin-top:32px; }
-  .footer-src { display:none; }
-  .footer-info { font-family:var(--font-mono); font-size:10px; color:#3d4654; text-align:center; letter-spacing:0.3px; line-height:1.7; }
-  .footer-info a { color:#3d4654; text-decoration:none; }
+.bump-wrap { margin-top:18px; }
+.bump { background:var(--blue-soft); border:1px dashed rgba(74,93,255,.3); border-radius:var(--radius); padding:16px; cursor:pointer; transition:border-color .2s, background .2s; margin-bottom:18px; }
+.bump.checked { border-color:var(--blue); background:rgba(74,93,255,.12); }
+.bump-row { display:flex; align-items:flex-start; gap:12px; }
+.bump-box { width:20px; height:20px; border:2px solid var(--border); border-radius:3px; flex:0 0 auto; margin-top:2px; display:flex; align-items:center; justify-content:center; background:var(--bg); transition:all .2s; }
+.bump.checked .bump-box { border-color:var(--blue); background:var(--blue); }
+.bump-box .tick { display:none; color:#fff; font-size:12px; font-weight:700; }
+.bump.checked .bump-box .tick { display:block; }
+.bump-label .bump-tag { font-family:var(--font-mono); font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--blue); margin-bottom:4px; }
+.bump-label strong { font-size:14.5px; font-weight:600; display:block; margin-bottom:4px; }
+.bump-label p { font-size:13px; color:var(--muted); line-height:1.5; }
+.bump-label .price { margin-top:6px; font-size:13px; }
+.strike { text-decoration:line-through; text-decoration-color:var(--red); text-decoration-thickness:2px; color:var(--muted); }
+.now { color:var(--sage); font-weight:700; }
+.off-badge { font-family:var(--font-mono); font-size:10px; font-weight:600; background:rgba(220,79,85,.12); color:var(--red); border:1px solid rgba(220,79,85,.25); border-radius:3px; padding:2px 6px; vertical-align:middle; }
 
-  /* sticky cta — always visible */
-  .sticky-cta { position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(15,17,21,0.94); backdrop-filter:blur(10px); border-top:1px solid var(--border); padding:10px 16px calc(10px + env(safe-area-inset-bottom)); }
-  .sticky-cta .inner { max-width:460px; margin:0 auto; display:flex; flex-direction:column; gap:6px; }
-  .sticky-cta .label { display:flex; justify-content:space-between; align-items:center; }
-  .sticky-cta .label b { font-size:12px; font-weight:600; }
-  .sticky-cta .label span { font-family:var(--font-mono); font-size:10px; color:var(--sage); letter-spacing:0.5px; }
-  .sticky-cta button { width:100%; padding:14px 18px; font-size:15px; }
+.btn { display:block; width:100%; border:none; border-radius:var(--radius); font-family:var(--font-head); font-size:16px; font-weight:600; padding:18px; cursor:pointer; transition:filter .2s, transform .15s; }
+.btn:active { transform:scale(.99); }
+.btn-primary { background:var(--blue); color:#fff; }
+.btn-primary:hover { filter:brightness(1.08); }
+.btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); }
+.btn-ghost:hover { color:var(--text); }
+.btn-sage { background:var(--sage); color:#fff; }
+.btn-sage:hover { filter:brightness(1.06); }
+.submit-note { font-family:var(--font-mono); font-size:11px; color:var(--muted); text-align:center; margin-top:12px; }
 
-  /* interstitial */
-  .interstitial { position:fixed; inset:0; z-index:100; background:var(--bg); background-image:radial-gradient(800px 500px at 50% 0%, rgba(88,147,234,0.10), transparent 60%); display:none; flex-direction:column; justify-content:center; padding:28px 24px; overflow-y:auto; }
-  .interstitial.show { display:flex; animation:fade 0.3s ease; }
-  @keyframes fade { from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;} }
-  .inter-inner { max-width:400px; margin:0 auto; width:100%; }
-  .inter-badge { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--sage); margin-bottom:14px; }
-  .interstitial h2 { font-size:26px; line-height:1.15; font-weight:700; margin-bottom:14px; letter-spacing:-0.5px; }
-  .interstitial .idesc { font-size:15px; color:var(--muted); line-height:1.55; margin-bottom:8px; }
-  .interstitial .iprice { font-size:15px; margin-bottom:26px; }
-  .interstitial .iprice .strike { text-decoration:line-through; color:#5b6675; }
-  .interstitial .iprice .now { color:var(--sage); font-weight:600; }
-  .interstitial .btn { margin-bottom:10px; }
+/* ─── SECTION SPACING ────────────────────────────────── */
+.sec { padding: 80px 0; }
+@media(min-width:768px){ .sec { padding: 104px 0; } }
 
-  /* animations */
-  .reveal { opacity:0; transform:translateY(10px); animation:rise 0.5s ease forwards; }
-  @keyframes rise { to{opacity:1;transform:none;} }
-  .r1{animation-delay:.05s} .r2{animation-delay:.12s} .r3{animation-delay:.19s}
+.eyebrow { font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--sage); margin-bottom:14px; }
+.sec-dark .eyebrow { color:#62bfa1; }
+
+h2 { font-size:28px; line-height:1.16; font-weight:700; letter-spacing:-.5px; margin-bottom:36px; }
+@media(min-width:768px){ h2 { font-size:34px; } }
+.sec-dark h2 { color:#f1ede8; }
+
+/* ─── PAIN IMAGE CARDS ────────────────────────────────── */
+.pain-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 8px;
+}
+@media(min-width:560px){ .pain-grid { grid-template-columns: 1fr 1fr; gap:20px; } }
+@media(min-width:900px){ .pain-grid { grid-template-columns: repeat(3,1fr); gap:24px; } }
+
+.pain-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  cursor: default;
+}
+.pain-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(0,0,0,.12);
+  border-color: var(--sage);
+}
+[data-theme="dark"] .pain-card:hover {
+  box-shadow: 0 20px 48px rgba(0,0,0,.5);
+  border-color: var(--sage);
+}
+.pain-card img { transition: transform .35s ease; }
+.pain-card:hover img { transform: scale(1.04); }
+
+.pain-card img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+.pain-card-body {
+  padding: 20px 20px 22px;
+  border-top: 1px solid var(--border);
+}
+.pain-card-body p {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.45;
+  text-align: left;
+}
+
+/* ─── SCIENCE SECTION ────────────────────────────────── */
+.science-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 8px;
+}
+@media(min-width:560px){ .science-grid { grid-template-columns: 1fr 1fr; gap:24px; } }
+
+.science-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 26px;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+}
+.science-card:hover { border-color: var(--sage); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.07); }
+[data-theme="dark"] .science-card { background: var(--surface); }
+[data-theme="dark"] .science-card:hover { box-shadow: 0 12px 32px rgba(0,0,0,.3); }
+.science-num { font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: var(--sage); letter-spacing: 1px; margin-bottom: 16px; }
+.science-card h3 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: -.2px; }
+.science-card p { font-size: 14.5px; color: var(--muted); line-height: 1.7; }
+
+/* ─── 3 DAYS SECTION ─────────────────────────────────── */
+.days-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 8px;
+  position: relative;
+}
+@media(min-width:768px){
+  .days-grid { grid-template-columns: repeat(3,1fr); gap:0; }
+}
+
+.day-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: background .25s;
+}
+@media(min-width:768px){
+  .day-card { border-radius:0; border-right:none; }
+  .day-card:first-child { border-radius:16px 0 0 16px; }
+  .day-card:last-child { border-radius:0 16px 16px 0; border-right:1px solid rgba(255,255,255,0.1); }
+}
+.day-card:hover { background: rgba(255,255,255,0.10); }
+
+.day-header { display:flex; flex-direction:column; gap:8px; }
+.day-icon-row { display:flex; align-items:center; gap:0; margin-bottom:8px; }
+.day-circle { width:44px; height:44px; border-radius:50%; background:rgba(42,143,114,0.25); border:1px solid rgba(42,143,114,0.4); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:12px; font-weight:700; color:#a7e8d4; flex-shrink:0; }
+.day-line { flex:1; height:1px; background:rgba(255,255,255,0.12); border-top:1px dashed rgba(255,255,255,0.2); }
+.day-card:last-child .day-line { display:none; }
+.day-label { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,0.4); }
+.day-card h3 { font-size:22px; font-weight:700; color:#f1ede8; line-height:1.2; letter-spacing:-.3px; }
+
+.day-checklist { list-style:none; display:flex; flex-direction:column; gap:12px; flex:1; }
+.day-checklist li { display:flex; gap:10px; align-items:flex-start; font-size:14px; color:rgba(255,255,255,0.65); line-height:1.5; }
+.day-check { width:18px; height:18px; border-radius:50%; background:rgba(42,143,114,0.2); border:1px solid rgba(42,143,114,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.day-check::after { content:''; width:5px; height:5px; border-radius:50%; background:#62bfa1; }
+
+.day-callout {
+  background: rgba(42,143,114,0.12);
+  border: 1px solid rgba(42,143,114,0.25);
+  border-radius: 10px;
+  padding: 16px;
+}
+.day-callout .callout-label { font-family:var(--font-mono); font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:#62bfa1; margin-bottom:6px; }
+.day-callout p { font-size:13.5px; color:#d4ede6; line-height:1.5; font-style:italic; }
+
+/* ─── OUTCOMES ───────────────────────────────────────── */
+.outcomes { display:grid; gap:14px; }
+@media(min-width:640px){ .outcomes { grid-template-columns:1fr 1fr; } }
+.outcome { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; display:flex; gap:14px; align-items:flex-start; box-shadow:var(--shadow); transition: border-color .2s, transform .2s; }
+.outcome:hover { border-color: var(--sage); transform: translateY(-2px); }
+.outcome .ck { width:22px; height:22px; border-radius:50%; background:var(--sage-soft); border:1.5px solid var(--sage); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; font-size:11px; color:var(--sage); font-weight:700; }
+.outcome p { font-size:15px; line-height:1.5; }
+.outcome p b { display:block; font-weight:700; margin-bottom:5px; font-size:16px; }
+.outcome p span { color:var(--muted); font-size:14px; }
+
+/* ─── PRIZE ──────────────────────────────────────────── */
+/* ─── PRIZE BOX ──────────────────────────────────────── */
+.prize-box { background:var(--sage-soft); border:1px solid rgba(42,143,114,.2); border-radius:16px; padding:52px 32px; text-align:center; }
+[data-theme="dark"] .prize-box { border-color:rgba(98,191,161,.25); }
+.prize-box .amt { font-size:80px; font-weight:700; color:var(--sage); letter-spacing:-3px; line-height:1; margin-bottom:16px; }
+@media(min-width:768px){ .prize-box .amt { font-size:96px; } }
+.prize-box .prize-sub { font-size:16px; color:var(--muted); margin-bottom:28px; max-width:460px; margin-left:auto; margin-right:auto; line-height:1.6; }
+.triad-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:20px; }
+.triad-chip { font-family:var(--font-mono); font-size:12px; letter-spacing:.5px; color:var(--sage); background:var(--sage-soft); border:1px solid rgba(42,143,114,.25); border-radius:var(--radius); padding:9px 16px; }
+.prize-note { font-family:var(--font-mono); font-size:12px; color:var(--muted); }
+
+/* ─── FIT CHECK ──────────────────────────────────────── */
+.fit { display:grid; gap:14px; }
+@media(min-width:520px){ .fit { grid-template-columns:1fr 1fr; } }
+.fit .col { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); }
+.fit .col h4 { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:14px; }
+.fit .col.yes h4 { color:var(--sage); }
+.fit .col.no h4 { color:var(--muted); }
+.fit .col ul { list-style:none; }
+.fit .col li { font-size:14.5px; padding:6px 0; display:flex; gap:10px; align-items:flex-start; border-bottom:1px solid var(--border); }
+.fit .col li:last-child { border-bottom:none; }
+.fit .col.yes li { color:var(--text); }
+.fit .col.no li { color:var(--muted); }
+
+/* ─── SOCIAL PROOF ───────────────────────────────────── */
+.proof-bar { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:40px 0; }
+.proof-inner { display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; }
+@media(min-width:640px){ .proof-inner { flex-direction:row; align-items:center; justify-content:center; gap:48px; text-align:left; } }
+.proof-stat { display:flex; flex-direction:column; gap:4px; }
+.proof-num { font-size:48px; font-weight:700; color:var(--text); letter-spacing:-2px; line-height:1; }
+.proof-label { font-family:var(--font-mono); font-size:12px; color:var(--muted); letter-spacing:.5px; }
+.proof-divider { width:1px; height:48px; background:var(--border); display:none; }
+@media(min-width:640px){ .proof-divider { display:block; } }
+
+/* ─── FAQ ────────────────────────────────────────────── */
+.faq { }
+.qa { border-bottom:1px solid var(--border); }
+.qa summary { cursor:pointer; list-style:none; padding:22px 0; font-size:16px; font-weight:500; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.qa summary::-webkit-details-marker { display:none; }
+.qa summary .plus { color:var(--sage); font-family:var(--font-mono); transition:transform .2s; flex:0 0 auto; font-size:20px; }
+.qa[open] summary .plus { transform:rotate(45deg); }
+.qa p { font-size:15px; color:var(--muted); line-height:1.65; padding:0 0 20px; }
+
+.faq-dark .qa { border-bottom:1px solid rgba(255,255,255,.08); }
+.faq-dark .qa summary { color:#f1ede8; }
+.faq-dark .qa p { color:#7c7470; }
+
+/* ─── FOOTER ─────────────────────────────────────────── */
+.footer { padding:40px 0 20px; border-top:1px solid var(--border); }
+.footer-src { display:none; }
+.footer-info { font-family:var(--font-mono); font-size:10px; color:var(--muted); text-align:center; letter-spacing:.3px; line-height:1.8; opacity:.5; }
+.footer-info a { color:inherit; text-decoration:none; }
+
+/* ─── STICKY NAV BAR ─────────────────────────────────── */
+.sticky-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(245,240,235,0.97); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  transition: background 0.25s;
+}
+[data-theme="dark"] .sticky-nav { background: rgba(15,17,21,0.97); }
+.sticky-nav .wrap { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.sticky-nav-left { display:flex; flex-direction:column; gap:2px; }
+.sticky-nav-label { font-size:13px; font-weight:600; color:var(--text); }
+.sticky-nav-date { font-family:var(--font-mono); font-size:11px; color:var(--muted); }
+.sticky-timer { display:flex; align-items:center; gap:8px; }
+.timer-unit { display:flex; flex-direction:column; align-items:center; min-width:48px; }
+.timer-num { font-family:var(--font-mono); font-size:26px; font-weight:700; color:var(--text); line-height:1; }
+.timer-label { font-family:var(--font-mono); font-size:9px; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); margin-top:3px; }
+.timer-sep { font-family:var(--font-mono); font-size:22px; font-weight:700; color:var(--muted); margin-bottom:14px; }
+.sticky-nav .sticky-btn { background:var(--blue); color:#fff; border:none; border-radius:var(--radius); font-family:var(--font-head); font-size:14px; font-weight:600; padding:13px 24px; cursor:pointer; white-space:nowrap; transition:filter .2s; }
+.sticky-nav .sticky-btn:hover { filter:brightness(1.08); }
+/* push content down */
+body { padding-top: 76px; }
+@media(min-width:768px){ body { padding-top: 72px; } }
+/* mobile nav */
+@media(max-width:640px){
+  .sticky-nav { padding:10px 0; }
+  .sticky-nav-date { display:none; }
+  .sticky-nav-label { font-size:11px; }
+  .timer-num { font-size:20px; }
+  .timer-label { display:none; }
+  .timer-sep { font-size:18px; margin-bottom:0; }
+  .sticky-nav .sticky-btn { font-size:12px; padding:10px 14px; }
+  .sticky-nav .wrap { gap:8px; }
+}
+@media(max-width:400px){
+  /* hide days on very small screens */
+  .timer-unit:first-child, .timer-sep:first-of-type { display:none; }
+}
+
+/* ─── STICKY CTA (mobile bottom) ────────────────────── */
+.sticky-cta { position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(245,240,235,.95); backdrop-filter:blur(12px); border-top:1px solid var(--border); padding:10px 16px calc(10px + env(safe-area-inset-bottom)); }
+[data-theme="dark"] .sticky-cta { background:rgba(15,17,21,.94); }
+.sticky-cta .inner { max-width:460px; margin:0 auto; display:flex; flex-direction:column; gap:6px; }
+.sticky-cta .lbl { display:flex; justify-content:space-between; align-items:center; }
+.sticky-cta .lbl b { font-size:12px; font-weight:600; }
+.sticky-cta .lbl span { font-family:var(--font-mono); font-size:10px; color:var(--sage); }
+.sticky-cta button { width:100%; padding:14px 18px; font-size:15px; }
+@media(min-width:768px){ .sticky-cta { display:none !important; } }
+
+/* ─── INTERSTITIAL ───────────────────────────────────── */
+.interstitial { position:fixed; inset:0; z-index:100; background:var(--bg); display:none; flex-direction:column; justify-content:center; padding:28px 24px; overflow-y:auto; }
+.interstitial.show { display:flex; animation:fade .3s ease; }
+@keyframes fade { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none} }
+.inter-inner { max-width:400px; margin:0 auto; width:100%; }
+.inter-badge { font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--sage); margin-bottom:14px; }
+.interstitial h2 { font-size:26px; line-height:1.15; font-weight:700; margin-bottom:14px; }
+.interstitial .idesc { font-size:15px; color:var(--muted); line-height:1.55; margin-bottom:8px; }
+.interstitial .iprice { font-size:15px; margin-bottom:26px; }
+.interstitial .btn { margin-bottom:10px; }
+
+/* ─── ANIMATIONS ─────────────────────────────────────── */
+.reveal { opacity:0; transform:translateY(10px); animation:rise .5s ease forwards; }
+@keyframes rise { to{opacity:1;transform:none} }
+.r1{animation-delay:.05s}.r2{animation-delay:.12s}.r3{animation-delay:.2s}
 </style>
 </head>
 <body>
 
+<!-- ══ STICKY NAV BAR ════════════════════════════════════ -->
+<div class="sticky-nav">
+  <div class="wrap">
+    <div class="sticky-nav-left">
+      <span class="sticky-nav-label">Sprint starts in</span>
+      <span class="sticky-nav-date">Friday, Jun 6 &middot; 9:00 AM IST</span>
+    </div>
+    <div class="sticky-timer">
+      <div class="timer-unit"><span class="timer-num" id="tDays">--</span><span class="timer-label">Days</span></div>
+      <span class="timer-sep">:</span>
+      <div class="timer-unit"><span class="timer-num" id="tHours">--</span><span class="timer-label">Hours</span></div>
+      <span class="timer-sep">:</span>
+      <div class="timer-unit"><span class="timer-num" id="tMins">--</span><span class="timer-label">Minutes</span></div>
+      <span class="timer-sep">:</span>
+      <div class="timer-unit"><span class="timer-num" id="tSecs">--</span><span class="timer-label">Seconds</span></div>
+    </div>
+    <button class="sticky-btn" id="navClaimBtn">Claim my free spot &rarr;</button>
+  </div>
+</div>
+
+<!-- ══ HERO ══════════════════════════════════════════════ -->
+<div class="section-light hero-section">
 <div class="wrap">
-
-  <!-- 01 HERO -->
-  <div class="topbar reveal r1"><span class="dot"></span><span class="brandtag">Wired to Launch</span></div>
-  <span class="badge reveal r1"><span class="pulse"></span>Cohort 02 &middot; Starts Friday 9:00 AM IST</span>
-  <h1 class="reveal r2">The 72-Hour Founder Sprint. <span class="free">Free.</span></h1>
-  <p class="sub reveal r2">Pick your idea. Build your funnel. Get your first outreach done. In three days, you go from <strong>"I should start something"</strong> to <strong>a live offer with real people in the pipeline.</strong></p>
-  <div class="meta-row reveal r2">
-    <span class="chip">&#9889; <b>72 hours</b></span>
-    <span class="chip">&#127942; <b>&#8377;10,000</b> prize</span>
-    <span class="chip">&#127903; Free entry</span>
-    <span class="chip">&#128205; Virtual</span>
+  <div class="topbar reveal r1">
+    <div class="topbar-left">
+      <span class="dot"></span>
+      <span class="brandtag">Wired to Launch</span>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
   </div>
 
-  <!-- countdown timer -->
-  <div class="countdown-bar reveal r3" id="countdownBar">
-    <span class="countdown-label">Sprint starts in</span>
-    <span class="countdown-timer" id="countdownTimer">--d --h --m</span>
-    <span class="countdown-sub">Spots close Friday 8 AM IST</span>
-  </div>
-
-  <!-- hero card — single status line above headline -->
-  <div class="hero-status-line reveal r3">
-    <span class="hero-status-dot"></span>
-    <span class="hero-status-text">&gt;_ sprint_02.status &nbsp;&middot;&nbsp; COHORT_02 &nbsp;&middot;&nbsp; <span style="color:#4ade80;">ACTIVE</span> &nbsp;&middot;&nbsp; FORMAT: FREE_ENTRY &nbsp;&middot;&nbsp; PRIZE: &#8377;10,000</span>
-  </div>
-
-  <!-- 02 THE PROBLEM -->
-  <div class="section">
-    <div class="eyebrow">// Sound familiar?</div>
-    <h2>You don't have an idea problem. You have a <em>finishing</em> problem.</h2>
-    <ul class="pain">
-      <li><span class="x">&times;</span><span>17 half-built ideas in your notes app, none of them live.</span></li>
-      <li><span class="x">&times;</span><span>You open the laptop to "start" and lose three hours to research that goes nowhere.</span></li>
-      <li><span class="x">&times;</span><span>Every launch waits for the version of you that has it all figured out. That version never shows up.</span></li>
-      <li><span class="x">&times;</span><span>You work best in bursts, but nothing you've tried is built for how your brain actually runs.</span></li>
-    </ul>
-  </div>
-
-  <!-- 03 HOW IT WORKS -->
-  <div class="section">
-    <div class="eyebrow">// How the sprint works</div>
-    <h2>Three days. One push. A real launch at the end.</h2>
-    <div class="timeline">
-      <div class="step">
-        <div class="rail"><div class="num">D1</div><div class="line"></div></div>
-        <div class="body"><h3><span>Day 1 &middot; Friday</span>Lock the idea</h3><p>No more 17 tabs. Pick one idea, pressure-test it, and commit. You leave Day 1 knowing exactly what you're building and who it's for.</p></div>
+  <div class="hero-grid">
+    <!-- left: copy -->
+    <div>
+      <span class="badge reveal r1"><span class="pulse"></span>Cohort 02 &middot; Fri &ndash; Sun &middot; Free entry</span>
+      <h1 class="reveal r2">72 hours.<br>One idea. <span class="free">Live offer.</span></h1>
+      <p class="hero-punch reveal r2">Go from <strong>"I should start something"</strong> to a live offer with real people in the pipeline — in a single weekend.</p>
+      <div class="hero-meta reveal r3">
+        <span class="hero-meta-item">&#127942; <b>&#8377;10,000 prize</b></span>
+        <span class="hero-meta-item">&#9889; 72 hours</span>
+        <span class="hero-meta-item">&#127903; Virtual</span>
+        <span class="hero-meta-item">&#128205; Free to enter</span>
       </div>
-      <div class="step">
-        <div class="rail"><div class="num">D2</div><div class="line"></div></div>
-        <div class="body"><h3><span>Day 2 &middot; Saturday</span>Build the funnel</h3><p>Landing page, offer, and the path from stranger to buyer. By end of day you have something a real person can click and pay for.</p></div>
-      </div>
-      <div class="step">
-        <div class="rail"><div class="num">D3</div></div>
-        <div class="body"><h3><span>Day 3 &middot; Sunday</span>Do the outreach</h3><p>The part everyone skips. You send your first real outreach and get your offer in front of actual humans before the 72 hours run out.</p></div>
+      <div class="hero-social-proof reveal r3">
+        <div class="proof-pill"><span class="live-dot"></span><b>216 founders</b>&nbsp;joined Cohort 01</div>
+        <div class="proof-pill">Spots close Fri 8 AM IST</div>
       </div>
     </div>
-  </div>
 
-  <!-- 04 THE OUTCOME -->
-  <div class="section">
-    <div class="eyebrow">// What you walk away with</div>
-    <h2>Not motivation. Assets.</h2>
-    <div class="outcomes">
-      <div class="outcome"><span class="ck">&#9656;</span><p><b>A validated idea</b><span>One offer you actually committed to, not a list of maybes.</span></p></div>
-      <div class="outcome"><span class="ck">&#9656;</span><p><b>A live funnel</b><span>A working landing page and offer people can buy.</span></p></div>
-      <div class="outcome"><span class="ck">&#9656;</span><p><b>First outreach sent</b><span>Real conversations started, not "someday" plans.</span></p></div>
-      <div class="outcome"><span class="ck">&#9656;</span><p><b>Proof you can finish</b><span>The single most valuable thing for a founder who keeps stalling.</span></p></div>
-    </div>
+    <!-- right: form -->
+    <div class="hero-form-col reveal r3">
+      <div class="card" id="formCard">
+        <div class="card-title">Claim your free spot</div>
+        <div class="card-sub">Takes 30 seconds. No payment to join.</div>
 
-    <div style="margin-top:28px;">
-      <div class="eyebrow">// The incentive</div>
-      <div class="prize-box">
-        <div class="amt">&#8377;10,000</div>
-        <p>The triad with the highest combined score by Sunday night wins. Each member takes home an equal share.</p>
-        <div class="triad-row">
-          <span class="triad-chip">&#8377;3,333 &middot; MEMBER 1</span>
-          <span class="triad-chip">&#8377;3,333 &middot; MEMBER 2</span>
-          <span class="triad-chip">&#8377;3,334 &middot; MEMBER 3</span>
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" autocomplete="name" placeholder="Your name">
+          <div class="err" id="err-name">Enter your name</div>
         </div>
-        <div class="prize-note">Free to enter &middot; Everyone walks away with a live offer either way.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 05 FIT CHECK -->
-  <div class="section">
-    <div class="eyebrow">// Is this you?</div>
-    <h2>Built for founders who move in bursts.</h2>
-    <div class="fit">
-      <div class="col yes"><h4>This is for you if</h4><ul>
-        <li><span style="color:var(--sage)">&#10003;</span> You have ideas but struggle to ship</li>
-        <li><span style="color:var(--sage)">&#10003;</span> You work best with a deadline and momentum</li>
-        <li><span style="color:var(--sage)">&#10003;</span> You want a real launch, not another course</li>
-      </ul></div>
-      <div class="col no"><h4>Skip it if</h4><ul>
-        <li>&times; You want passive theory to watch later</li>
-        <li>&times; You're not free across the weekend</li>
-        <li>&times; You'd rather plan for six more months</li>
-      </ul></div>
-    </div>
-  </div>
-
-  <!-- SOCIAL PROOF BAR -->
-  <div style="margin-top:0; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; display:flex; flex-direction:column; gap:6px;">
-    <div style="font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--sage);">// Cohort 01</div>
-    <p style="font-size:15px; font-weight:600; color:var(--text); line-height:1.4;">216 founders registered for Cohort 01.</p>
-    <p style="font-family:var(--font-mono); font-size:12px; color:var(--muted); line-height:1.6;">Triads are matched by chronotype. &nbsp;&#183;&nbsp; Spots close Friday 8 AM IST.</p>
-  </div>
-
-  <!-- 06 SIGN UP FORM -->
-  <div class="section" style="padding-top:24px; border-top:1px solid var(--border);">
-    <div class="card" id="formCard">
-      <div class="card-title">Claim your free spot</div>
-      <div class="card-sub">Takes 30 seconds. No payment to join.</div>
-
-      <div class="field">
-        <label for="name">Name</label>
-        <input type="text" id="name" autocomplete="name" placeholder="Your name">
-        <div class="err" id="err-name">Enter your name</div>
-      </div>
-
-      <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@email.com">
-        <div class="err" id="err-email">Enter a valid email</div>
-      </div>
-
-      <div class="field">
-        <label for="phone">WhatsApp number</label>
-        <div class="phone-row">
-          <div class="cc">+91</div>
-          <input type="tel" id="phone" inputmode="numeric" autocomplete="tel" placeholder="10-digit number" maxlength="10">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@email.com">
+          <div class="err" id="err-email">Enter a valid email</div>
         </div>
-        <div class="err" id="err-phone">Enter a valid 10-digit number</div>
-        <div style="font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:6px; letter-spacing:0.3px;">WhatsApp only. We send daily PDFs here. No calls, no spam.</div>
-      </div>
-
-      <div class="field" style="margin-bottom:0;">
-        <label>When do you build best?</label>
-        <div class="chrono-grid" id="chrono">
-          <div class="chrono" data-value="early_bird"><span class="emoji">&#127749;</span><span class="name">Early Bird</span><span class="time">Before 9 AM</span></div>
-          <div class="chrono" data-value="day_operator"><span class="emoji">&#9728;&#65039;</span><span class="name">Day Operator</span><span class="time">9 AM &ndash; 3 PM</span></div>
-          <div class="chrono" data-value="night_owl"><span class="emoji">&#127769;</span><span class="name">Night Owl</span><span class="time">6 PM &ndash; 2 AM</span></div>
+        <div class="field">
+          <label for="phone">WhatsApp number</label>
+          <div class="phone-row">
+            <div class="cc">+91</div>
+            <input type="tel" id="phone" inputmode="numeric" autocomplete="tel" placeholder="10-digit number" maxlength="10">
+          </div>
+          <div class="err" id="err-phone">Enter a valid 10-digit number</div>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:6px;">WhatsApp only. Daily PDFs here. No calls, no spam.</div>
         </div>
-        <div class="err" id="err-chrono">Pick one</div>
-      </div>
+        <div class="field" style="margin-bottom:0">
+          <label>When do you build best?</label>
+          <div class="chrono-grid" id="chrono">
+            <div class="chrono" data-value="early_bird"><span class="emoji">&#127749;</span><span class="name">Early Bird</span><span class="time">Before 9 AM</span></div>
+            <div class="chrono" data-value="day_operator"><span class="emoji">&#9728;&#65039;</span><span class="name">Day Operator</span><span class="time">9 AM &ndash; 3 PM</span></div>
+            <div class="chrono" data-value="night_owl"><span class="emoji">&#127769;</span><span class="name">Night Owl</span><span class="time">6 PM &ndash; 2 AM</span></div>
+          </div>
+          <div class="err" id="err-chrono">Pick one</div>
+        </div>
 
-      <!-- order bump checkbox -->
-      <div style="margin-top:18px;">
-        <div class="bump-check" id="bumpCheck">
-          <div class="bump-check-row">
-            <div class="bump-checkbox"><span class="tick">&#10003;</span></div>
-            <div class="bump-label">
-              <div class="bump-tag">Optional upgrade</div>
-              <strong>Add Sprint Copilot (&#8377;499)</strong>
-              <p>Skip the blank-page paralysis. Let Sprint Copilot generate your landing page copy, pricing model, and outreach scripts for you in seconds. Sprint founders only. Normally &#8377;3,799.</p>
-              <div class="price"><span class="strike">&#8377;3,799</span> <span class="now">&#8377;499</span> <span class="off-badge">87% off</span></div>
+        <button class="btn btn-primary" id="submitBtn" style="margin-top:20px;">Claim my free spot &rarr;</button>
+        <p class="submit-note" id="submitNote">No payment to join. Takes 30 seconds.</p>
+
+        <div class="bump-wrap" style="margin-top:0">
+          <div class="bump" id="bumpCheck">
+            <div class="bump-row">
+              <div class="bump-box"><span class="tick">&#10003;</span></div>
+              <div class="bump-label">
+                <div class="bump-tag">Optional upgrade</div>
+                <strong>Add Sprint Copilot (&#8377;499)</strong>
+                <p>Skip the blank-page paralysis. Sprint Copilot generates your landing page copy, pricing model, and outreach scripts in seconds.</p>
+                <div class="price"><span class="strike">&#8377;3,799</span> <span class="now">&#8377;499</span> <span class="off-badge">87% off</span></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <button class="btn btn-primary" id="submitBtn" style="margin-top:16px;">Claim my free spot &rarr;</button>
-      <p class="submit-note" id="submitNote">No payment to join the free sprint.</p>
     </div>
   </div>
+</div>
+</div>
 
-  <!-- 07 FAQ -->
-  <div class="section">
-    <div class="eyebrow">// Before you ask</div>
-    <h2>Quick questions.</h2>
-    <div class="faq">
-      <details class="qa"><summary>Is it really free? <span class="plus">+</span></summary><p>Yes. The sprint is 100% free. There's an optional &#8377;499 AI tool upgrade inside the sign-up form, but you can complete the full sprint and compete for the &#8377;10,000 prize without it.</p></details>
-      <details class="qa"><summary>What's a triad? <span class="plus">+</span></summary><p>You're matched with 2 other founders after signing up. Your triad score is the sum of all 3 members' points. The triad with the highest combined score wins &#8377;3,333 each.</p></details>
-      <details class="qa"><summary>What if I don't have an idea yet? <span class="plus">+</span></summary><p>Day 1 is built to solve exactly this. You'll run a structured audit to surface ideas from your own life, then pick and validate one before Day 2 starts.</p></details>
-      <details class="qa"><summary>How much time does it take? <span class="plus">+</span></summary><p>3 to 4 focused hours per day. Designed for sprint-style, burst-focused work, not marathon sessions.</p></details>
-      <details class="qa"><summary>Where does it happen? <span class="plus">+</span></summary><p>Fully virtual. You'll get daily PDFs (free tier) or access to the AI tool (paid upgrade), plus WhatsApp nudges to keep you on track.</p></details>
+<!-- ══ PAIN ════════════════════════════════════════════════ -->
+<div class="section-light" style="background:var(--surface)">
+<div class="wrap sec">
+  <div class="eyebrow">// Sound familiar?</div>
+  <h2>You don't have an idea problem.<br>You have a <em>finishing</em> problem.</h2>
+  <div class="pain-grid">
+
+    <div class="pain-card">
+      <img src="pain-1.png" alt="17 ideas, none shipped">
+      <div class="pain-card-body">
+        <p>17 ideas. Zero shipped.</p>
+      </div>
     </div>
+
+    <div class="pain-card">
+      <img src="pain-2.png" alt="Lost in research spiral">
+      <div class="pain-card-body">
+        <p>You start. Then research. Then close the laptop.</p>
+      </div>
+    </div>
+
+    <div class="pain-card">
+      <img src="pain-3.png" alt="Waiting to feel ready">
+      <div class="pain-card-body">
+        <p>Waiting to feel ready. That version never shows up.</p>
+      </div>
+    </div>
+
+    <div class="pain-card">
+      <img src="pain-4.png" alt="Burst then crash">
+      <div class="pain-card-body">
+        <p>You run on bursts. Nothing else is built for that.</p>
+      </div>
+    </div>
+
+    <div class="pain-card">
+      <img src="pain-5.png" alt="2am idea gone by morning">
+      <div class="pain-card-body">
+        <p>The 2 AM idea feels unstoppable. By morning, the energy is gone.</p>
+      </div>
+    </div>
+
+    <div class="pain-card">
+      <img src="pain-6.png" alt="Every system failed">
+      <div class="pain-card-body">
+        <p>You've tried every system. Every app. Nothing ever stuck.</p>
+      </div>
+    </div>
+
   </div>
 
-  <button class="btn btn-primary" id="submitBtn2" style="margin-top:8px;">Claim my free spot &rarr;</button>
-  <p class="submit-note" style="margin-bottom:32px;">Cohort 02 &middot; Starts Friday 9 AM IST &middot; Free entry</p>
+  <!-- pain section CTA -->
+  <div style="text-align:center; padding-top:56px;">
+    <p style="font-size:20px; font-weight:600; color:var(--text); margin-bottom:8px; letter-spacing:-.3px;">If any of this sounds like you — this sprint was built for you.</p>
+    <p style="font-family:var(--font-mono); font-size:12px; color:var(--muted); margin-bottom:28px;">Free entry &middot; Fri &ndash; Sun &middot; ₹10,000 prize</p>
+    <a href="#formCard" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'start'});return false;" style="display:inline-block; background:var(--blue); color:#fff; font-family:var(--font-head); font-size:16px; font-weight:600; padding:18px 40px; border-radius:var(--radius); text-decoration:none; transition:filter .2s;" onmouseover="this.style.filter='brightness(1.08)'" onmouseout="this.style.filter=''">Claim my free spot &rarr;</a>
+  </div>
 
-  <!-- FOOTER -->
+</div>
+</div>
+
+<!-- ══ WHY IT WORKS ══════════════════════════════════════ -->
+<div class="section-light">
+<div class="wrap sec">
+  <div class="eyebrow">// The science behind the sprint</div>
+  <h2 style="max-width:600px;">Built around how your brain actually works.</h2>
+  <div class="science-grid">
+
+    <div class="science-card">
+      <div class="science-num">01</div>
+      <h3>Executive dysfunction is real</h3>
+      <p>ADHD brains don't lack ideas or capability. They struggle with task initiation. The sprint's daily structure creates the external scaffold your prefrontal cortex needs to get past the blank page.</p>
+    </div>
+
+    <div class="science-card">
+      <div class="science-num">02</div>
+      <h3>Body doubling works</h3>
+      <p>Research shows people with ADHD are significantly more productive working alongside others, even virtually. The Triad puts three founders on the same deadline, competing together. Accountability built in.</p>
+    </div>
+
+    <div class="science-card">
+      <div class="science-num">03</div>
+      <h3>Time blindness needs urgency</h3>
+      <p>ADHD brains struggle with future time perception. "Someday" doesn't activate anything. A hard 72-hour window with a live leaderboard creates the now-or-never urgency that switches the brain on.</p>
+    </div>
+
+    <div class="science-card">
+      <div class="science-num">04</div>
+      <h3>Dopamine drives completion</h3>
+      <p>The ADHD brain runs on high-stimulation, deadline-driven bursts. The sprint is built for exactly one weekend of focused work. Not a 12-week program you'll drop by week two.</p>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══ HOW IT WORKS ══════════════════════════════════════ -->
+<div style="background:#1a2e25">
+<div class="wrap sec">
+  <div class="eyebrow" style="color:#62bfa1">// How the sprint works</div>
+  <h2 style="color:#f1ede8; margin-bottom:40px;">Three days. One push.<br>A real launch at the end.</h2>
+  <div class="days-grid">
+
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-icon-row">
+          <div class="day-circle">D1</div>
+          <div class="day-line"></div>
+        </div>
+        <div class="day-label">Day 1 &middot; Friday</div>
+        <h3>Pick &amp; Validate</h3>
+      </div>
+      <ul class="day-checklist">
+        <li><span class="day-check"></span>Run a Source Exhaust Audit across 6 areas of your life</li>
+        <li><span class="day-check"></span>Filter down to one strong idea with the AI Ideation Filter</li>
+        <li><span class="day-check"></span>Validate it before you build a single thing</li>
+      </ul>
+      <div class="day-callout">
+        <div class="callout-label">You will ship</div>
+        <p>A validated idea you are actually committed to building.</p>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-icon-row">
+          <div class="day-circle">D2</div>
+          <div class="day-line"></div>
+        </div>
+        <div class="day-label">Day 2 &middot; Saturday</div>
+        <h3>Build the Funnel</h3>
+      </div>
+      <ul class="day-checklist">
+        <li><span class="day-check"></span>Write your offer and pricing in under 2 hours</li>
+        <li><span class="day-check"></span>Build a live landing page with AI-generated copy</li>
+        <li><span class="day-check"></span>Set up your payment and fulfilment path</li>
+      </ul>
+      <div class="day-callout">
+        <div class="callout-label">You will ship</div>
+        <p>A working funnel a real person can find and pay for.</p>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-icon-row">
+          <div class="day-circle">D3</div>
+          <div class="day-line"></div>
+        </div>
+        <div class="day-label">Day 3 &middot; Sunday</div>
+        <h3>Do the Outreach</h3>
+      </div>
+      <ul class="day-checklist">
+        <li><span class="day-check"></span>Build your outreach list from warm contacts</li>
+        <li><span class="day-check"></span>Write and send your first 10 outreach messages</li>
+        <li><span class="day-check"></span>Get a real response before the 72 hours end</li>
+      </ul>
+      <div class="day-callout">
+        <div class="callout-label">You will ship</div>
+        <p>Real conversations started with real people before Sunday night.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center; margin-top:56px;">
+    <a href="#formCard" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'start'});return false;" style="display:inline-block; background:var(--blue); color:#fff; font-family:var(--font-head); font-size:16px; font-weight:600; padding:18px 44px; border-radius:var(--radius); text-decoration:none; transition:filter .2s;" onmouseover="this.style.filter='brightness(1.08)'" onmouseout="this.style.filter=''">Claim my free spot &rarr;</a>
+    <p style="font-family:var(--font-mono); font-size:11px; color:rgba(255,255,255,0.3); margin-top:12px;">Free entry &middot; 216 founders joined Cohort 01</p>
+  </div>
+</div>
+</div>
+
+<!-- ══ OUTCOMES ══════════════════════════════════════════ -->
+<div class="section-light" style="background:var(--surface)">
+<div class="wrap sec">
+  <div class="eyebrow">// What you walk away with</div>
+  <h2>Not motivation. Assets.</h2>
+  <div class="outcomes">
+    <div class="outcome"><span class="ck">&#10003;</span><p><b>A validated idea</b><span>One offer you actually committed to, not a list of maybes.</span></p></div>
+    <div class="outcome"><span class="ck">&#10003;</span><p><b>A live funnel</b><span>A working landing page and offer people can buy.</span></p></div>
+    <div class="outcome"><span class="ck">&#10003;</span><p><b>First outreach sent</b><span>Real conversations started, not "someday" plans.</span></p></div>
+    <div class="outcome"><span class="ck">&#10003;</span><p><b>Proof you can finish</b><span>The single most valuable thing for a founder who keeps stalling.</span></p></div>
+  </div>
+
+  <div style="margin-top:48px">
+    <div class="eyebrow">// The incentive</div>
+    <div class="prize-box">
+      <div class="amt">&#8377;10,000</div>
+      <p class="prize-sub">The triad with the highest combined score by Sunday night wins. Each member takes home an equal share.</p>
+      <div class="triad-row">
+        <span class="triad-chip">&#8377;3,333 &middot; MEMBER 1</span>
+        <span class="triad-chip">&#8377;3,333 &middot; MEMBER 2</span>
+        <span class="triad-chip">&#8377;3,334 &middot; MEMBER 3</span>
+      </div>
+      <div class="prize-note">Free to enter &middot; Everyone walks away with a live offer either way.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ SOCIAL PROOF BAR ══════════════════════════════════ -->
+<div class="proof-bar">
+<div class="wrap">
+  <div class="proof-inner">
+    <div class="proof-stat">
+      <div class="proof-num">216</div>
+      <div class="proof-label">founders in Cohort 01</div>
+    </div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat">
+      <div class="proof-num">72h</div>
+      <div class="proof-label">from idea to live offer</div>
+    </div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat">
+      <div class="proof-num">&#8377;10K</div>
+      <div class="proof-label">prize pool per cohort</div>
+    </div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat">
+      <div class="proof-num">Free</div>
+      <div class="proof-label">to enter, always</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ FIT CHECK ═════════════════════════════════════════ -->
+<div class="section-light">
+<div class="wrap sec">
+  <div class="eyebrow">// Is this you?</div>
+  <h2>Built for founders who move in bursts.</h2>
+  <div class="fit">
+    <div class="col yes"><h4>This is for you if</h4><ul>
+      <li><span style="color:var(--sage)">&#10003;</span> You have ideas but struggle to ship</li>
+      <li><span style="color:var(--sage)">&#10003;</span> You work best with a deadline and momentum</li>
+      <li><span style="color:var(--sage)">&#10003;</span> You want a real launch, not another course</li>
+    </ul></div>
+    <div class="col no"><h4>Skip it if</h4><ul>
+      <li>&times; You want passive theory to watch later</li>
+      <li>&times; You're not free across the weekend</li>
+      <li>&times; You'd rather plan for six more months</li>
+    </ul></div>
+  </div>
+
+  <!-- second CTA -->
+  <div style="max-width:480px;margin:56px auto 0">
+    <button class="btn btn-primary" id="submitBtn2">Claim my free spot &rarr;</button>
+    <p class="submit-note">Cohort 02 &middot; Starts Friday 9 AM IST &middot; Free entry</p>
+  </div>
+</div>
+</div>
+
+<!-- ══ FAQ ═══════════════════════════════════════════════ -->
+<div style="background:#1a2e25">
+<div class="wrap sec">
+  <p style="font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#62bfa1; margin-bottom:12px;">A few things founders ask...</p>
+  <h2 style="color:#f1ede8; font-size:clamp(28px, 5vw, 42px); letter-spacing:-.8px; margin-bottom:48px;">Before you sign up.</h2>
+  <div class="faq faq-dark">
+    <details class="qa"><summary>Is it really free? <span class="plus">+</span></summary><p>Yes. The sprint is 100% free. There's an optional &#8377;499 AI tool upgrade inside the sign-up form, but you can complete the full sprint and compete for the &#8377;10,000 prize without it.</p></details>
+    <details class="qa"><summary>What's a triad? <span class="plus">+</span></summary><p>You're matched with 2 other founders after signing up. Your triad score is the sum of all 3 members' points. The triad with the highest combined score wins &#8377;3,333 each.</p></details>
+    <details class="qa"><summary>What if I don't have an idea yet? <span class="plus">+</span></summary><p>Day 1 is built to solve exactly this. You'll run a structured audit to surface ideas from your own life, then pick and validate one before Day 2 starts.</p></details>
+    <details class="qa"><summary>How much time does it take? <span class="plus">+</span></summary><p>3 to 4 focused hours per day. Designed for sprint-style, burst-focused work, not marathon sessions.</p></details>
+    <details class="qa"><summary>Where does it happen? <span class="plus">+</span></summary><p>Fully virtual. You'll get daily PDFs (free tier) or access to the AI tool (paid upgrade), plus WhatsApp nudges to keep you on track.</p></details>
+  </div>
+
+  <div style="max-width:480px;margin:56px auto 0; text-align:center;">
+    <button class="btn btn-primary" id="submitBtn3">Claim my free spot &rarr;</button>
+    <p style="font-family:var(--font-mono); font-size:11px; color:rgba(255,255,255,.3); margin-top:12px;">Cohort 02 &middot; Starts Friday 9 AM IST &middot; Free entry</p>
+  </div>
+</div>
+</div>
+
+<!-- ══ CLOSING SECTION ══════════════════════════════════ -->
+<div class="section-light">
+<div class="wrap sec" style="text-align:center;">
+  <h2 style="font-size:clamp(32px, 5vw, 48px); letter-spacing:-1.5px; line-height:1.05; margin-bottom:20px; max-width:560px; margin-left:auto; margin-right:auto;">This happens<br>once a cohort.</h2>
+  <p style="font-size:17px; color:var(--muted); max-width:480px; margin:0 auto 12px; line-height:1.65;">Cohort 02 opens Friday 9 AM IST. For 72 hours, you build alongside founders who move exactly like you do.</p>
+  <p style="font-size:16px; font-style:italic; color:var(--muted); margin-bottom:48px;">If this sounds like you, come build with us.</p>
+
+  <!-- mini form card -->
+  <div style="max-width:520px; margin:0 auto; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:36px 32px; box-shadow:0 8px 32px rgba(0,0,0,0.08);">
+    <div style="display:flex; align-items:center; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:20px;">
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--muted);">&#128197; Fri &ndash; Sun, Jun 6&ndash;8</span>
+      <span style="color:var(--border)">·</span>
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--muted);">&#9889; 72 hours</span>
+      <span style="color:var(--border)">·</span>
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--sage); font-weight:600;">FREE</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:6px; justify-content:center; margin-bottom:24px;">
+      <span style="width:8px; height:8px; border-radius:50%; background:#4ade80; box-shadow:0 0 6px #4ade80; display:inline-block;"></span>
+      <span style="font-family:var(--font-mono); font-size:12px; color:var(--muted);"><b style="color:var(--text);">216 founders</b> joined Cohort 01</span>
+    </div>
+    <button class="btn btn-primary" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'start'})" style="font-size:17px; padding:20px; border-radius:8px;">Claim my free spot &rarr;</button>
+    <p style="font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:16px; font-style:italic;">Nothing to prepare. Just show up ready to build.</p>
+  </div>
+</div>
+</div>
+
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<div class="section-light">
+<div class="wrap">
   <div class="footer">
     <div class="footer-src">src: <span id="srcLabel">ig01</span></div>
     <div class="footer-info">WiredToLaunch &middot; MSME Registered &middot; <a href="mailto:hello@wiredtolaunch.in">hello@wiredtolaunch.in</a></div>
   </div>
+</div>
+</div>
 
-</div><!-- /wrap -->
-
-<!-- sticky cta -->
+<!-- sticky CTA (mobile only) -->
 <div class="sticky-cta" id="stickyCta">
   <div class="inner">
-    <div class="label"><b>Free 72-Hour Sprint</b><span>Starts Friday 9 AM &middot; &#8377;10,000 prize pool</span></div>
+    <div class="lbl"><b>Free 72-Hour Sprint</b><span>Fri 9 AM &middot; &#8377;10,000 prize</span></div>
     <button class="btn btn-primary" id="stickyBtn">Claim spot &rarr;</button>
   </div>
 </div>
 
-<!-- post-submit interstitial (paid path only — free path skips this) -->
+<!-- interstitial -->
 <div class="interstitial" id="interstitial">
   <div class="inter-inner">
     <div class="inter-badge">&#10003; You're in. Spot reserved.</div>
@@ -418,180 +873,126 @@
     <p class="idesc">Skip the blank-page paralysis. Sprint Copilot generates your landing page copy, pricing model, and outreach scripts in seconds.</p>
     <p class="iprice"><span class="strike">&#8377;3,799</span> &nbsp;<span class="now">&#8377;499</span></p>
     <button class="btn btn-sage" id="upgradeBtn">Pay &#8377;499 and get access &rarr;</button>
-    <button class="btn btn-ghost" id="skipUpgradeBtn">Skip for now, just join free</button>
+    <button class="btn btn-ghost" id="skipUpgradeBtn">Skip, just join free</button>
   </div>
 </div>
 
 <script>
-  // countdown timer — targets next Friday 9:00 AM IST (UTC+5:30)
-  function getNextFriday9AM() {
-    const now = new Date();
-    const istOffset = 5.5 * 60 * 60 * 1000;
-    const nowIST = new Date(now.getTime() + istOffset);
-    const day = nowIST.getUTCDay(); // 0=Sun, 5=Fri
-    const daysUntilFri = (5 - day + 7) % 7 || 7; // if today is Friday past 9AM, next Friday
-    const target = new Date(Date.UTC(
-      nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate() + daysUntilFri,
-      3, 30, 0 // 9:00 AM IST = 03:30 UTC
-    ));
-    // if today is Friday and before 9AM IST, use today
-    if (day === 5) {
-      const todayFri = new Date(Date.UTC(
-        nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate(), 3, 30, 0
-      ));
-      if (now < todayFri) return todayFri;
-    }
-    return target;
+// ── THEME ──
+const html = document.documentElement;
+const toggleBtn = document.getElementById('themeToggle');
+const saved = localStorage.getItem('wtl-theme');
+if (saved) html.setAttribute('data-theme', saved);
+function syncIcon(){ toggleBtn.textContent = html.getAttribute('data-theme')==='dark' ? '☀️' : '🌙'; }
+syncIcon();
+toggleBtn.addEventListener('click', () => {
+  const next = html.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('wtl-theme', next);
+  syncIcon();
+});
+
+// ── COUNTDOWN ──
+function getNextFriday9AM() {
+  const now = new Date();
+  const istOff = 5.5 * 3600000;
+  const nowIST = new Date(now.getTime() + istOff);
+  const day = nowIST.getUTCDay();
+  const dUntilFri = (5 - day + 7) % 7 || 7;
+  const t = new Date(Date.UTC(nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate() + dUntilFri, 3, 30, 0));
+  if (day === 5) {
+    const tf = new Date(Date.UTC(nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate(), 3, 30, 0));
+    if (now < tf) return tf;
   }
-  function updateCountdown() {
-    const target = getNextFriday9AM();
-    const diff = target - Date.now();
-    if (diff <= 0) {
-      document.getElementById("countdownTimer").textContent = "Live now!";
-      return;
-    }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    document.getElementById("countdownTimer").textContent =
-      (d > 0 ? d + "d " : "") + h + "h " + m + "m " + s + "s";
+  return t;
+}
+function pad(n){ return String(n).padStart(2,'0'); }
+function tick() {
+  const diff = getNextFriday9AM() - Date.now();
+  if (diff <= 0) {
+    document.getElementById('countdownTimer').textContent = 'Live now!';
+    ['tDays','tHours','tMins','tSecs'].forEach(id => document.getElementById(id).textContent = '00');
+    return;
   }
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
+  const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000),
+        m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+  const ct = document.getElementById('countdownTimer'); if(ct) ct.textContent = (d>0?d+'d ':'')+h+'h '+m+'m '+s+'s';
+  document.getElementById('tDays').textContent  = pad(d);
+  document.getElementById('tHours').textContent = pad(h);
+  document.getElementById('tMins').textContent  = pad(m);
+  document.getElementById('tSecs').textContent  = pad(s);
+}
+tick(); setInterval(tick, 1000);
 
-  // src detection
-  const SRC_MAP = {
-    "launchbrained.live":"ig01","onelaunchaway.live":"ig02","sprintandlaunch.live":"ig03",
-    "theadhdfounders.live":"ig04","wiredtolaunch.live":"ig05"
-  };
-  const SRC = SRC_MAP[location.hostname.replace(/^www\./,"")] || "ig01";
-  document.getElementById("srcLabel").textContent = SRC;
+document.getElementById('navClaimBtn').addEventListener('click', () => {
+  document.getElementById('formCard').scrollIntoView({behavior:'smooth', block:'start'});
+});
 
-  // placeholder redirect URLs — replace before go-live
-  const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/C7putrWEbyH9hHJvR5JEDw?mode=gi_t";
-  const COSMOFEED_URL      = "https://superprofile.bio/vp/the-72-hour-founder-sprint";
+// ── SRC ──
+const SRC_MAP = {'launchbrained.live':'ig01','onelaunchaway.live':'ig02','sprintandlaunch.live':'ig03','theadhdfounders.live':'ig04','wiredtolaunch.live':'ig05'};
+const SRC = SRC_MAP[location.hostname.replace(/^www\./,'')] || 'ig01';
+document.getElementById('srcLabel').textContent = SRC;
 
-  // chronotype
-  let chronotype = null;
-  document.querySelectorAll(".chrono").forEach(card => {
-    card.addEventListener("click", () => {
-      document.querySelectorAll(".chrono").forEach(c => c.classList.remove("selected"));
-      card.classList.add("selected");
-      chronotype = card.dataset.value;
-      document.getElementById("err-chrono").classList.remove("show");
-    });
+// ── REDIRECTS ──
+const WA_URL = 'https://chat.whatsapp.com/C7putrWEbyH9hHJvR5JEDw?mode=gi_t';
+const CF_URL = 'https://superprofile.bio/vp/the-72-hour-founder-sprint';
+
+// ── CHRONO ──
+let chronotype = null;
+document.querySelectorAll('.chrono').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.chrono').forEach(x => x.classList.remove('selected'));
+    c.classList.add('selected'); chronotype = c.dataset.value;
+    document.getElementById('err-chrono').classList.remove('show');
   });
+});
 
-  // order bump toggle
-  let bumpSelected = false;
-  const bumpCheck   = document.getElementById("bumpCheck");
-  const submitBtn   = document.getElementById("submitBtn");
-  const submitBtn2  = document.getElementById("submitBtn2");
-  const submitNote  = document.getElementById("submitNote");
+// ── BUMP ──
+let bumpSelected = false;
+const bumpEl = document.getElementById('bumpCheck');
+const sb = document.getElementById('submitBtn');
+const sn = document.getElementById('submitNote');
+bumpEl.addEventListener('click', () => {
+  bumpSelected = !bumpSelected;
+  bumpEl.classList.toggle('checked', bumpSelected);
+  sb.textContent = bumpSelected ? 'Claim my spot + Sprint Copilot → ₹499' : 'Claim my free spot →';
+  sn.textContent = bumpSelected ? 'Sprint is free · Sprint Copilot billed at ₹499' : 'No payment to join the free sprint.';
+});
 
-  bumpCheck.addEventListener("click", () => {
-    bumpSelected = !bumpSelected;
-    bumpCheck.classList.toggle("checked", bumpSelected);
-    if (bumpSelected) {
-      submitBtn.textContent  = "Claim my spot + Sprint Copilot → ₹499";
-      submitNote.textContent = "Sprint is free · Sprint Copilot billed at ₹499";
-    } else {
-      submitBtn.textContent  = "Claim my free spot →";
-      submitNote.textContent = "No payment to join the free sprint.";
-    }
-  });
-
-  // validation
-  const nameEl  = document.getElementById("name");
-  const emailEl = document.getElementById("email");
-  const phoneEl = document.getElementById("phone");
-  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const phoneRe = /^[6-9]\d{9}$/;
-
-  phoneEl.addEventListener("input", () => {
-    phoneEl.value = phoneEl.value.replace(/\D/g,"").slice(0,10);
-  });
-
-  function setErr(el, id, show) {
-    document.getElementById(id).classList.toggle("show", show);
-    el.classList.toggle("invalid", show);
-  }
-
-  function validate() {
-    let ok = true;
-    if (!nameEl.value.trim())               { setErr(nameEl,"err-name",true);  ok=false; } else setErr(nameEl,"err-name",false);
-    if (!emailRe.test(emailEl.value.trim())) { setErr(emailEl,"err-email",true); ok=false; } else setErr(emailEl,"err-email",false);
-    if (!phoneRe.test(phoneEl.value.trim())) { setErr(phoneEl,"err-phone",true); ok=false; } else setErr(phoneEl,"err-phone",false);
-    if (!chronotype) { document.getElementById("err-chrono").classList.add("show"); ok=false; }
-    return ok;
-  }
-
-  async function handleSubmit() {
-    if (!validate()) {
-      document.getElementById("formCard").scrollIntoView({behavior:"smooth", block:"start"});
-      return;
-    }
-
-    submitBtn.disabled  = true;
-    submitBtn2.disabled = true;
-    const orig = submitBtn.textContent;
-    submitBtn.textContent = "Saving your spot...";
-
-    const payload = {
-      name:      nameEl.value.trim(),
-      email:     emailEl.value.trim(),
-      phone:     "+91" + phoneEl.value.trim(),
-      chronotype: chronotype,
-      src:       SRC,
-      paid:      false,
-      ref:       null,
-      userAgent: navigator.userAgent
-      // created_at: serverTimestamp() — added server-side
-    };
-
-    // Firestore write — wired after template approval
-    // await writeToFirestore("registrations", payload);
-    console.log("[WTL] registration payload:", payload);
-
-    submitBtn.disabled  = false;
-    submitBtn2.disabled = false;
-    submitBtn.textContent = orig;
-
-    if (bumpSelected) {
-      showInterstitial();
-    } else {
-      safeRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group");
-    }
-  }
-
-  document.getElementById("submitBtn").addEventListener("click", handleSubmit);
-  document.getElementById("submitBtn2").addEventListener("click", handleSubmit);
-  document.getElementById("stickyBtn").addEventListener("click", () => {
-    document.getElementById("formCard").scrollIntoView({behavior:"smooth", block:"start"});
-  });
-
-  // interstitial (paid path only)
-  function showInterstitial() {
-    document.getElementById("interstitial").classList.add("show");
-    document.body.style.overflow = "hidden";
-    window.scrollTo(0,0);
-  }
-  document.getElementById("upgradeBtn").addEventListener("click", () => safeRedirect(COSMOFEED_URL, "PAID / Cosmofeed"));
-  document.getElementById("skipUpgradeBtn").addEventListener("click", () => {
-    document.getElementById("interstitial").classList.remove("show");
-    document.body.style.overflow = "";
-    safeRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group");
-  });
-
-  function safeRedirect(url, label) {
-    if (url.startsWith("#PLACEHOLDER")) {
-      // dev-only: show which path would fire, no visible error to users
-      console.log("[WTL] redirect placeholder:", label);
-      return;
-    }
-    window.location.href = url;
-  }
+// ── VALIDATION ──
+const nameEl = document.getElementById('name'), emailEl = document.getElementById('email'), phoneEl = document.getElementById('phone');
+const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/, phoneRe = /^[6-9]\d{9}$/;
+phoneEl.addEventListener('input', () => { phoneEl.value = phoneEl.value.replace(/\D/g,'').slice(0,10); });
+function setErr(el, id, show) { document.getElementById(id).classList.toggle('show',show); el.classList.toggle('invalid',show); }
+function validate() {
+  let ok = true;
+  if (!nameEl.value.trim()) { setErr(nameEl,'err-name',true); ok=false; } else setErr(nameEl,'err-name',false);
+  if (!emailRe.test(emailEl.value.trim())) { setErr(emailEl,'err-email',true); ok=false; } else setErr(emailEl,'err-email',false);
+  if (!phoneRe.test(phoneEl.value.trim())) { setErr(phoneEl,'err-phone',true); ok=false; } else setErr(phoneEl,'err-phone',false);
+  if (!chronotype) { document.getElementById('err-chrono').classList.add('show'); ok=false; }
+  return ok;
+}
+async function handleSubmit() {
+  if (!validate()) { document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'start'}); return; }
+  sb.disabled = true; const orig = sb.textContent; sb.textContent = 'Saving your spot...';
+  const payload = { name:nameEl.value.trim(), email:emailEl.value.trim(), phone:'+91'+phoneEl.value.trim(), chronotype, src:SRC, paid:false, ref:null, userAgent:navigator.userAgent };
+  console.log('[WTL] registration payload:', payload);
+  sb.disabled = false; sb.textContent = orig;
+  bumpSelected ? showInter() : safeRedirect(WA_URL);
+}
+['submitBtn','submitBtn2','submitBtn3'].forEach(id => {
+  document.getElementById(id).addEventListener('click', handleSubmit);
+});
+document.getElementById('stickyBtn').addEventListener('click', () => {
+  document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'start'});
+});
+function showInter() { document.getElementById('interstitial').classList.add('show'); document.body.style.overflow='hidden'; window.scrollTo(0,0); }
+document.getElementById('upgradeBtn').addEventListener('click', () => safeRedirect(CF_URL));
+document.getElementById('skipUpgradeBtn').addEventListener('click', () => {
+  document.getElementById('interstitial').classList.remove('show'); document.body.style.overflow='';
+  safeRedirect(WA_URL);
+});
+function safeRedirect(url) { if (!url.startsWith('#')) window.location.href = url; }
 </script>
 </body>
 </html>
