@@ -140,6 +140,7 @@
   /* order bump checkbox */
   .bump-check { background:linear-gradient(180deg, rgba(88,147,234,0.08), rgba(88,147,234,0.03)); border:1px dashed rgba(88,147,234,0.35); border-radius:var(--radius); padding:16px; margin-top:6px; margin-bottom:18px; cursor:pointer; transition:border-color 0.2s, background 0.2s; }
   .bump-check.checked { border-color:var(--blue); background:rgba(88,147,234,0.12); }
+  .bump-check.disabled { opacity:0.5; cursor:not-allowed; }
   .bump-check-row { display:flex; align-items:flex-start; gap:12px; }
   .bump-checkbox { width:20px; height:20px; border:2px solid var(--border); border-radius:3px; flex:0 0 auto; margin-top:2px; display:flex; align-items:center; justify-content:center; transition:border-color 0.2s, background 0.2s; background:var(--bg); }
   .bump-check.checked .bump-checkbox { border-color:var(--blue); background:var(--blue); }
@@ -154,6 +155,15 @@
   .bump-label .price .now { color:var(--sage); font-weight:700; }
   .bump-label .price .save { font-family:var(--font-mono); font-size:11px; color:var(--muted); }
   .off-badge { font-family:var(--font-mono); font-size:10px; font-weight:600; letter-spacing:0.5px; background:rgba(224,104,109,0.15); color:#e0686d; border:1px solid rgba(224,104,109,0.3); border-radius:3px; padding:2px 6px; vertical-align:middle; }
+
+  /* consent checkbox */
+  .consent-row { display:flex; align-items:flex-start; gap:10px; margin-top:16px; cursor:pointer; user-select:none; }
+  .consent-checkbox { width:18px; height:18px; border:2px solid var(--border); border-radius:3px; flex:0 0 auto; margin-top:2px; display:flex; align-items:center; justify-content:center; transition:border-color 0.2s, background 0.2s; background:var(--bg); }
+  .consent-checkbox.checked { border-color:var(--sage); background:var(--sage); }
+  .consent-checkbox .tick { display:none; color:#0a1a14; font-size:11px; font-weight:700; }
+  .consent-checkbox.checked .tick { display:block; }
+  .consent-text { font-size:13px; color:var(--muted); line-height:1.5; }
+  .consent-text a { color:var(--sage); text-decoration:underline; }
 
   /* buttons */
   .btn { display:block; width:100%; border:none; border-radius:var(--radius); font-family:var(--font-head); font-size:16px; font-weight:600; padding:18px; cursor:pointer; transition:filter 0.2s, transform 0.2s; }
@@ -214,7 +224,7 @@
 
   <!-- 01 HERO -->
   <div class="topbar reveal r1"><span class="dot"></span><span class="brandtag">Wired to Launch</span></div>
-  <span class="badge reveal r1"><span class="pulse"></span>Cohort 02 &middot; Starts Friday 9:00 AM IST</span>
+  <span class="badge reveal r1"><span class="pulse"></span><span id="heroBadgeText">Cohort 02 &middot; Starts Friday 9:00 AM IST</span></span>
   <h1 class="reveal r2">The 72-Hour Founder Sprint. <span class="free">Free.</span></h1>
   <p class="sub reveal r2">Pick your idea. Build your funnel. Get your first outreach done. In three days, you go from <strong>"I should start something"</strong> to <strong>a live offer with real people in the pipeline.</strong></p>
   <div class="meta-row reveal r2">
@@ -226,9 +236,9 @@
 
   <!-- countdown timer -->
   <div class="countdown-bar reveal r3" id="countdownBar">
-    <span class="countdown-label">Sprint starts in</span>
+    <span class="countdown-label" id="countdownLabel">Sprint starts in</span>
     <span class="countdown-timer" id="countdownTimer">--d --h --m</span>
-    <span class="countdown-sub">Spots close Friday 8 AM IST</span>
+    <span class="countdown-sub" id="countdownSub">Spots close Friday 8 AM IST</span>
   </div>
 
   <!-- hero card — single status line above headline -->
@@ -317,7 +327,7 @@
   <div style="margin-top:0; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; display:flex; flex-direction:column; gap:6px;">
     <div style="font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--sage);">// Cohort 01</div>
     <p style="font-size:15px; font-weight:600; color:var(--text); line-height:1.4;">216 founders registered for Cohort 01.</p>
-    <p style="font-family:var(--font-mono); font-size:12px; color:var(--muted); line-height:1.6;">Triads are matched by chronotype. &nbsp;&#183;&nbsp; Spots close Friday 8 AM IST.</p>
+    <p style="font-family:var(--font-mono); font-size:12px; color:var(--muted); line-height:1.6;" id="socialProofNote">Triads are matched by chronotype. &nbsp;&#183;&nbsp; Registration is open now.</p>
   </div>
 
   <!-- 06 SIGN UP FORM -->
@@ -360,17 +370,23 @@
 
       <!-- order bump checkbox -->
       <div style="margin-top:18px;">
-        <div class="bump-check" id="bumpCheck">
+        <div class="bump-check" id="bumpCheck" role="checkbox" tabindex="0" aria-checked="false" aria-labelledby="bumpLabelText">
           <div class="bump-check-row">
-            <div class="bump-checkbox"><span class="tick">&#10003;</span></div>
+            <div class="bump-checkbox"><span class="tick" aria-hidden="true">&#10003;</span></div>
             <div class="bump-label">
               <div class="bump-tag">Optional upgrade</div>
-              <strong>Add Sprint Copilot (&#8377;499)</strong>
+              <strong id="bumpLabelText">Add Sprint Copilot (&#8377;499)</strong>
               <p>Skip the blank-page paralysis. Let Sprint Copilot generate your landing page copy, pricing model, and outreach scripts for you in seconds. Sprint founders only. Normally &#8377;3,799.</p>
               <div class="price"><span class="strike">&#8377;3,799</span> <span class="now">&#8377;499</span> <span class="off-badge">87% off</span></div>
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- TODO: replace mailto fallback with real published Privacy Policy / Terms of Service URLs once available -->
+      <div class="consent-row" id="consentRow">
+        <div class="consent-checkbox" id="consentCheckbox" role="checkbox" tabindex="0" aria-checked="false" aria-labelledby="consentText"><span class="tick" aria-hidden="true">&#10003;</span></div>
+        <span class="consent-text" id="consentText">I agree to the <a href="mailto:hello@wiredtolaunch.in" rel="noopener">Privacy Policy</a> and <a href="mailto:hello@wiredtolaunch.in" rel="noopener">Terms of Service</a>.</span>
       </div>
 
       <button class="btn btn-primary" id="submitBtn" style="margin-top:16px;">Claim my free spot &rarr;</button>
@@ -388,16 +404,18 @@
       <details class="qa"><summary>What if I don't have an idea yet? <span class="plus">+</span></summary><p>Day 1 is built to solve exactly this. You'll run a structured audit to surface ideas from your own life, then pick and validate one before Day 2 starts.</p></details>
       <details class="qa"><summary>How much time does it take? <span class="plus">+</span></summary><p>3 to 4 focused hours per day. Designed for sprint-style, burst-focused work, not marathon sessions.</p></details>
       <details class="qa"><summary>Where does it happen? <span class="plus">+</span></summary><p>Fully virtual. You'll get daily PDFs (free tier) or access to the AI tool (paid upgrade), plus WhatsApp nudges to keep you on track.</p></details>
+      <details class="qa"><summary>What if I can't make it every day? <span class="plus">+</span></summary><p>Do your best to show up for all three days. If you miss part of a day, you'll still get that day's PDF (or Sprint Copilot access) and WhatsApp nudges to catch up. Missing time just makes it harder to hit your triad's target by Sunday night.</p></details>
+      <details class="qa"><summary>Do I need a team or co-founder to join? <span class="plus">+</span></summary><p>No. You join solo and get matched into a triad of 3 founders by chronotype after signing up. You don't need a team, a validated idea, or prior experience going in.</p></details>
     </div>
   </div>
 
   <button class="btn btn-primary" id="submitBtn2" style="margin-top:8px;">Claim my free spot &rarr;</button>
-  <p class="submit-note" style="margin-bottom:32px;">Cohort 02 &middot; Starts Friday 9 AM IST &middot; Free entry</p>
+  <p class="submit-note" id="submitNote2" style="margin-bottom:32px;">Cohort 02 &middot; Starts Friday 9 AM IST &middot; Free entry</p>
 
   <!-- FOOTER -->
   <div class="footer">
     <div class="footer-src">src: <span id="srcLabel">ig01</span></div>
-    <div class="footer-info">WiredToLaunch &middot; MSME Registered &middot; <a href="mailto:hello@wiredtolaunch.in">hello@wiredtolaunch.in</a></div>
+    <div class="footer-info">WiredToLaunch &middot; MSME Registered &middot; <a href="mailto:hello@wiredtolaunch.in">hello@wiredtolaunch.in</a> &middot; <a href="mailto:hello@wiredtolaunch.in" rel="noopener">Privacy</a> &middot; <a href="mailto:hello@wiredtolaunch.in" rel="noopener">Terms</a></div>
   </div>
 
 </div><!-- /wrap -->
@@ -405,7 +423,7 @@
 <!-- sticky cta -->
 <div class="sticky-cta" id="stickyCta">
   <div class="inner">
-    <div class="label"><b>Free 72-Hour Sprint</b><span>Starts Friday 9 AM &middot; &#8377;10,000 prize pool</span></div>
+    <div class="label"><b>Free 72-Hour Sprint</b><span id="stickyLabel">Starts Friday 9 AM &middot; &#8377;10,000 prize pool</span></div>
     <button class="btn btn-primary" id="stickyBtn">Claim spot &rarr;</button>
   </div>
 </div>
@@ -422,34 +440,98 @@
   </div>
 </div>
 
+<!-- registration confirmation overlay, shown briefly before the WhatsApp/Cosmofeed redirect -->
+<div class="interstitial" id="confirmOverlay">
+  <div class="inter-inner" style="text-align:center;">
+    <div class="inter-badge">&#10003; Registration confirmed</div>
+    <h2 id="confirmHeading">You're in.</h2>
+    <p class="idesc" id="confirmMsg">Redirecting you to WhatsApp...</p>
+  </div>
+</div>
+
 <script>
-  // countdown timer — targets next Friday 9:00 AM IST (UTC+5:30)
-  function getNextFriday9AM() {
-    const now = new Date();
-    const istOffset = 5.5 * 60 * 60 * 1000;
-    const nowIST = new Date(now.getTime() + istOffset);
-    const day = nowIST.getUTCDay(); // 0=Sun, 5=Fri
-    const daysUntilFri = (5 - day + 7) % 7 || 7; // if today is Friday past 9AM, next Friday
-    const target = new Date(Date.UTC(
-      nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate() + daysUntilFri,
-      3, 30, 0 // 9:00 AM IST = 03:30 UTC
-    ));
-    // if today is Friday and before 9AM IST, use today
-    if (day === 5) {
-      const todayFri = new Date(Date.UTC(
-        nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate(), 3, 30, 0
-      ));
-      if (now < todayFri) return todayFri;
+  // cohort live window, recurring every week: Friday 9:00 AM IST through the following Monday 9:00 AM IST (72 hours)
+  const LIVE_MS = 72 * 60 * 60 * 1000;   // 72-hour live window
+  const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+  function getMostRecentFriday930UTC(now) {
+    // returns the most recent Friday 03:30:00.000 UTC (= 9:00 AM IST) at or before `now`
+    const candidate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 3, 30, 0, 0));
+    const day = now.getUTCDay(); // 0=Sun..6=Sat, Friday=5
+    const daysSinceFriday = (day - 5 + 7) % 7; // 0 if today is Friday
+    let base = new Date(candidate.getTime() - daysSinceFriday * 24 * 60 * 60 * 1000);
+    if (daysSinceFriday === 0 && now.getTime() < candidate.getTime()) {
+      // it's Friday but before 03:30 UTC (9 AM IST), so the "most recent" Friday window is last week's
+      base = new Date(base.getTime() - WEEK_MS);
     }
-    return target;
+    return base;
   }
+
+  let isLive = false;
+  let wasLive = false;
+  let bumpSelected = false;
+  const bumpCheck = document.getElementById("bumpCheck");
+
+  // redirect URLs — declared here (before updateCountdown() first runs) so the live-window
+  // force-close path below can safely reference them without a TDZ error
+  const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/C7putrWEbyH9hHJvR5JEDw?mode=gi_t";
+  const COSMOFEED_URL      = "https://superprofile.bio/vp/the-72-hour-founder-sprint";
+
   function updateCountdown() {
-    const target = getNextFriday9AM();
-    const diff = target - Date.now();
-    if (diff <= 0) {
+    const now = new Date();
+    const windowStart = getMostRecentFriday930UTC(now);
+    const windowEnd = new Date(windowStart.getTime() + LIVE_MS);
+    isLive = now.getTime() < windowEnd.getTime();
+    const diff = isLive ? null : (windowStart.getTime() + WEEK_MS) - now.getTime();
+
+    if (isLive) {
+      // Fix B: forcibly close the paid interstitial every tick while live (no-op once it's already closed)
+      const interstitialEl = document.getElementById("interstitial");
+      if (interstitialEl.classList.contains("show")) {
+        interstitialEl.classList.remove("show");
+        document.body.style.overflow = "";
+        const c = freeConfirmCopy();
+        showConfirmationThenRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group", c.heading, c.message);
+      }
       document.getElementById("countdownTimer").textContent = "Live now!";
+      if (!wasLive) {
+        wasLive = true;
+        // order bump is a same-cohort upsell, so force it off and lock it once the cohort has gone live
+        bumpSelected = false;
+        bumpCheck.classList.remove("checked");
+        bumpCheck.classList.add("disabled");
+        bumpCheck.setAttribute("aria-checked", "false");
+        bumpCheck.setAttribute("aria-disabled", "true");
+        bumpCheck.setAttribute("tabindex", "-1");
+        document.getElementById("countdownLabel").textContent = "Cohort status";
+        document.getElementById("submitBtn").textContent  = "Join now, sprint in progress →";
+        document.getElementById("submitBtn2").textContent = "Join now, sprint in progress →";
+        document.getElementById("stickyBtn").textContent  = "Join now →";
+        document.getElementById("submitNote").textContent = "This cohort is already underway. You'll jump in and catch up fast.";
+        document.getElementById("submitNote2").textContent = "This cohort is already underway. You'll jump in and catch up fast.";
+        document.getElementById("heroBadgeText").innerHTML = "Live now &middot; join in progress";
+        document.getElementById("countdownSub").innerHTML = "Cohort is live now &middot; join in progress";
+        document.getElementById("stickyLabel").innerHTML = "Live now &middot; join in progress";
+      }
       return;
     }
+
+    if (wasLive) {
+      wasLive = false;
+      bumpCheck.classList.remove("disabled");
+      bumpCheck.removeAttribute("aria-disabled");
+      bumpCheck.setAttribute("tabindex", "0");
+      document.getElementById("countdownLabel").textContent = "Sprint starts in";
+      document.getElementById("submitBtn").textContent  = "Claim my free spot →";
+      document.getElementById("submitBtn2").textContent = "Claim my free spot →";
+      document.getElementById("stickyBtn").textContent  = "Claim spot →";
+      document.getElementById("submitNote").textContent = "No payment to join the free sprint.";
+      document.getElementById("submitNote2").innerHTML = "Cohort 02 &middot; Starts Friday 9 AM IST &middot; Free entry";
+      document.getElementById("heroBadgeText").innerHTML = "Cohort 02 &middot; Starts Friday 9:00 AM IST";
+      document.getElementById("countdownSub").textContent = "Spots close Friday 8 AM IST";
+      document.getElementById("stickyLabel").innerHTML = "Starts Friday 9 AM &middot; &#8377;10,000 prize pool";
+    }
+
     const d = Math.floor(diff / 86400000);
     const h = Math.floor((diff % 86400000) / 3600000);
     const m = Math.floor((diff % 3600000) / 60000);
@@ -463,14 +545,10 @@
   // src detection
   const SRC_MAP = {
     "launchbrained.live":"ig01","onelaunchaway.live":"ig02","sprintandlaunch.live":"ig03",
-    "theadhdfounders.live":"ig04","wiredtolaunch.live":"ig05"
+    "theadhdfounders.live":"ig04","wiredtolaunch.live":"ig05","wiredtolaunch.in":"direct"
   };
-  const SRC = SRC_MAP[location.hostname.replace(/^www\./,"")] || "ig01";
+  const SRC = SRC_MAP[location.hostname.replace(/^www\./,"")] || "unknown";
   document.getElementById("srcLabel").textContent = SRC;
-
-  // placeholder redirect URLs — replace before go-live
-  const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/C7putrWEbyH9hHJvR5JEDw?mode=gi_t";
-  const COSMOFEED_URL      = "https://superprofile.bio/vp/the-72-hour-founder-sprint";
 
   // chronotype
   let chronotype = null;
@@ -484,21 +562,54 @@
   });
 
   // order bump toggle
-  let bumpSelected = false;
-  const bumpCheck   = document.getElementById("bumpCheck");
   const submitBtn   = document.getElementById("submitBtn");
   const submitBtn2  = document.getElementById("submitBtn2");
   const submitNote  = document.getElementById("submitNote");
 
-  bumpCheck.addEventListener("click", () => {
+  function toggleBump() {
+    if (isLive) return;
     bumpSelected = !bumpSelected;
     bumpCheck.classList.toggle("checked", bumpSelected);
+    bumpCheck.setAttribute("aria-checked", String(bumpSelected));
     if (bumpSelected) {
       submitBtn.textContent  = "Claim my spot + Sprint Copilot → ₹499";
       submitNote.textContent = "Sprint is free · Sprint Copilot billed at ₹499";
     } else {
       submitBtn.textContent  = "Claim my free spot →";
       submitNote.textContent = "No payment to join the free sprint.";
+    }
+  }
+
+  bumpCheck.addEventListener("click", toggleBump);
+  bumpCheck.addEventListener("keydown", (e) => {
+    if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      toggleBump();
+    }
+  });
+
+  // consent checkbox, informational only, does not gate submission (see validate())
+  let consentAccepted = false;
+  let consentAt = null;
+  const consentRow      = document.getElementById("consentRow");
+  const consentCheckbox = document.getElementById("consentCheckbox");
+
+  function toggleConsent() {
+    consentAccepted = !consentAccepted;
+    consentAt = consentAccepted ? new Date().toISOString() : null;
+    consentCheckbox.classList.toggle("checked", consentAccepted);
+    consentCheckbox.setAttribute("aria-checked", String(consentAccepted));
+  }
+
+  consentRow.addEventListener("click", (e) => {
+    if (e.target.closest("a")) return;
+    toggleConsent();
+  });
+
+  consentCheckbox.addEventListener("keydown", (e) => {
+    if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      toggleConsent();
     }
   });
 
@@ -545,9 +656,15 @@
       chronotype: chronotype,
       src:       SRC,
       paid:      false,
+      bumpIntent: bumpSelected, // intent AT SUBMIT TIME only, not the outcome, upgradeBtn/skipUpgradeBtn resolve later and aren't reflected here
+      lateSignup: isLive,
+      consent:   consentAccepted,
+      consentAt: consentAt,
       ref:       null,
       userAgent: navigator.userAgent
       // created_at: serverTimestamp() — added server-side
+      // TODO once Firestore write is wired: capture a bumpOutcome ("paid_path" | "declined" | "voided_live")
+      // from inside the upgradeBtn/skipUpgradeBtn/live-force-close handlers instead of relying on bumpIntent alone
     };
 
     // Firestore write — wired after template approval
@@ -561,7 +678,8 @@
     if (bumpSelected) {
       showInterstitial();
     } else {
-      safeRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group");
+      const c = freeConfirmCopy();
+      showConfirmationThenRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group", c.heading, c.message);
     }
   }
 
@@ -571,27 +689,78 @@
     document.getElementById("formCard").scrollIntoView({behavior:"smooth", block:"start"});
   });
 
+  // Fix 7: while any full-screen overlay is up, make the main content + sticky CTA unreachable
+  // (inert removes them from the tab order and blocks Enter/Space activation), so a keyboard
+  // user can't fire a second handleSubmit() behind the overlay
+  function setContentInert(disabled) {
+    document.querySelector(".wrap").toggleAttribute("inert", disabled);
+    document.getElementById("stickyCta").toggleAttribute("inert", disabled);
+  }
+
   // interstitial (paid path only)
   function showInterstitial() {
     document.getElementById("interstitial").classList.add("show");
     document.body.style.overflow = "hidden";
+    setContentInert(true);
     window.scrollTo(0,0);
   }
-  document.getElementById("upgradeBtn").addEventListener("click", () => safeRedirect(COSMOFEED_URL, "PAID / Cosmofeed"));
-  document.getElementById("skipUpgradeBtn").addEventListener("click", () => {
+  document.getElementById("upgradeBtn").addEventListener("click", () => {
     document.getElementById("interstitial").classList.remove("show");
-    document.body.style.overflow = "";
-    safeRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group");
-  });
-
-  function safeRedirect(url, label) {
-    if (url.startsWith("#PLACEHOLDER")) {
-      // dev-only: show which path would fire, no visible error to users
-      console.log("[WTL] redirect placeholder:", label);
+    if (isLive) {
+      // order-bump upsell is disabled once live, so route through the same live-signup flow as the free path
+      const c = freeConfirmCopy();
+      showConfirmationThenRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group", c.heading, c.message);
       return;
     }
+    showConfirmationThenRedirect(COSMOFEED_URL, "PAID / Cosmofeed", "Almost there.", "Taking you to secure checkout...");
+  });
+  document.getElementById("skipUpgradeBtn").addEventListener("click", () => {
+    document.getElementById("interstitial").classList.remove("show");
+    const c = freeConfirmCopy();
+    showConfirmationThenRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group", c.heading, c.message);
+  });
+
+  // copy for the free-path confirmation overlay, differs once the cohort has gone live (mid-sprint join, not a waitlist)
+  function freeConfirmCopy() {
+    return isLive
+      ? { heading: "You're in.", message: "This cohort is already underway, redirecting you to the WhatsApp group..." }
+      : { heading: "You're in.", message: "Redirecting you to WhatsApp..." };
+  }
+
+  // confirmation overlay, shown briefly before redirecting to WhatsApp/Cosmofeed
+  // guarded against being called twice (e.g. a synthesized second tap) so it can never schedule two redirects
+  let redirecting = false;
+  function showConfirmationThenRedirect(url, label, heading, message) {
+    if (redirecting) return;
+    redirecting = true;
+    document.getElementById("confirmHeading").textContent = heading;
+    document.getElementById("confirmMsg").textContent = message;
+    document.getElementById("confirmOverlay").classList.add("show");
+    document.body.style.overflow = "hidden";
+    setContentInert(true);
+    window.scrollTo(0,0);
+    setTimeout(() => {
+      document.getElementById("confirmOverlay").classList.remove("show");
+      document.body.style.overflow = "";
+      setContentInert(false);
+      safeRedirect(url, label);
+    }, 1400);
+  }
+
+  function safeRedirect(url, label) {
     window.location.href = url;
   }
+
+  // bfcache/back-button: reset any stuck overlay if the page is restored from cache
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+      document.getElementById("confirmOverlay").classList.remove("show");
+      document.getElementById("interstitial").classList.remove("show");
+      document.body.style.overflow = "";
+      setContentInert(false);
+      redirecting = false;
+    }
+  });
 </script>
 </body>
 </html>
