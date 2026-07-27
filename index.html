@@ -338,13 +338,13 @@
 
       <div class="field">
         <label for="name">Name</label>
-        <input type="text" id="name" autocomplete="name" placeholder="Your name">
+        <input type="text" id="name" autocomplete="name" placeholder="Your name" maxlength="100">
         <div class="err" id="err-name">Enter your name</div>
       </div>
 
       <div class="field">
         <label for="email">Email</label>
-        <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@email.com">
+        <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@email.com" maxlength="254">
         <div class="err" id="err-email">Enter a valid email</div>
       </div>
 
@@ -389,6 +389,7 @@
       </div>
 
       <button class="btn btn-primary" id="submitBtn" style="margin-top:16px;">Claim my free spot &rarr;</button>
+      <div class="err" id="err-general" style="text-align:center;">Something went wrong. Please try again.</div>
       <p class="submit-note" id="submitNote">No payment to join the free sprint.</p>
     </div>
   </div>
@@ -475,6 +476,38 @@
   // force-close path below can safely reference them without a TDZ error
   const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/C7putrWEbyH9hHJvR5JEDw?mode=gi_t";
   const COSMOFEED_URL      = "https://superprofile.bio/vp/the-72-hour-founder-sprint";
+  const BACKEND_URL        = "https://wtl-backend-156822330505.asia-south1.run.app/api/register";
+  const PENDING_REG_KEY    = "wtl_pending_registration";
+
+  // On load, if a previous submission failed after exhausting its own retry (network failure,
+  // or 429/5xx even after the retry inside submitRegistration()) and got queued to localStorage,
+  // attempt to resend it exactly once here. The key is cleared before sending regardless of
+  // outcome, so a persistent backend outage can never turn this into an infinite retry loop.
+  function resendPendingRegistration() {
+    let raw;
+    try {
+      raw = localStorage.getItem(PENDING_REG_KEY);
+    } catch (e) {
+      return;
+    }
+    if (!raw) return;
+    localStorage.removeItem(PENDING_REG_KEY);
+    let payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch (e) {
+      return;
+    }
+    fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(8000),
+    }).catch((err) => {
+      console.error("[WTL] pending registration resend failed:", err);
+    });
+  }
+  resendPendingRegistration();
 
   function updateCountdown() {
     const now = new Date();
@@ -637,16 +670,77 @@
     return ok;
   }
 
+  // POSTs the registration payload with an 8s client-side timeout. A 429 or 5xx response gets
+  // one retry after ~1.5s (transient rate-limit/server hiccup); a 400 means the payload itself
+  // is invalid and is never retried. Returns a small result object handleSubmit() branches on.
+  async function submitRegistration(payload) {
+    const attempt = async () => {
+      const res = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(8000),
+      });
+      let data = null;
+      try { data = await res.json(); } catch (e) { /* non-JSON body, ignore */ }
+      return { res, data };
+    };
+
+    try {
+      let { res, data } = await attempt();
+      if (res.status === 429 || res.status >= 500) {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        ({ res, data } = await attempt());
+      }
+      if (res.ok) return { ok: true };
+      if (res.status === 400) return { ok: false, status: 400, data };
+      return { ok: false, status: res.status, data };
+    } catch (err) {
+      console.error("[WTL] registration request failed:", err);
+      return { ok: false, networkError: true };
+    }
+  }
+
+  // Maps backend field-validation error strings back onto the matching inline error, reusing
+  // the same setErr() pattern validate() already uses for name/email/phone/chrono. Falls back to
+  // a generic message if none of the specific field errors matched, so a 400 never leaves the
+  // user looking at silent nothing.
+  function applyServerValidationErrors(errors) {
+    let matched = false;
+    (errors || []).forEach((msg) => {
+      if (/name/i.test(msg)) { setErr(nameEl, "err-name", true); matched = true; }
+      else if (/email/i.test(msg)) { setErr(emailEl, "err-email", true); matched = true; }
+      else if (/phone/i.test(msg)) { setErr(phoneEl, "err-phone", true); matched = true; }
+      else if (/chronotype/i.test(msg)) { document.getElementById("err-chrono").classList.add("show"); matched = true; }
+    });
+    document.getElementById("err-general").classList.toggle("show", !matched);
+    document.getElementById("formCard").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
   async function handleSubmit() {
+    // Snapshot the bump-toggle intent at the moment submission starts, and use this snapshot
+    // consistently (payload + post-request branching) instead of the live bumpSelected variable,
+    // so a user toggling the ₹499 bump checkbox mid-flight (possible across the retry window)
+    // can't end up routed to a path that doesn't match what was actually sent to the backend.
+    const bumpSnapshot = bumpSelected;
+    document.getElementById("err-general").classList.remove("show");
+
     if (!validate()) {
       document.getElementById("formCard").scrollIntoView({behavior:"smooth", block:"start"});
       return;
     }
 
+    // Lock the rest of the page (countdown-driven bump lock/unlock, bump toggle, sticky CTA,
+    // anything else) for the duration of this request, matching the pattern already used for
+    // full-screen overlays. Cleared below on the 400 path (user must be able to fix input) and
+    // inside showInterstitial()/showConfirmationThenRedirect() on every other exit path.
+    setContentInert(true);
     submitBtn.disabled  = true;
     submitBtn2.disabled = true;
-    const orig = submitBtn.textContent;
-    submitBtn.textContent = "Saving your spot...";
+    const orig  = submitBtn.textContent;
+    const orig2 = submitBtn2.textContent;
+    submitBtn.textContent  = "Saving your spot...";
+    submitBtn2.textContent = "Saving your spot...";
 
     const payload = {
       name:      nameEl.value.trim(),
@@ -655,30 +749,63 @@
       chronotype: chronotype,
       src:       SRC,
       paid:      false,
-      bumpIntent: bumpSelected, // intent AT SUBMIT TIME only, not the outcome, upgradeBtn/skipUpgradeBtn resolve later and aren't reflected here
+      bumpIntent: bumpSnapshot, // intent AT SUBMIT TIME only, not the outcome, upgradeBtn/skipUpgradeBtn resolve later and aren't reflected here
       lateSignup: isLive,
       consent:   consentAccepted,
       consentAt: consentAt,
-      ref:       null,
       userAgent: navigator.userAgent
       // created_at: serverTimestamp() — added server-side
       // TODO once Firestore write is wired: capture a bumpOutcome ("paid_path" | "declined" | "voided_live")
       // from inside the upgradeBtn/skipUpgradeBtn/live-force-close handlers instead of relying on bumpIntent alone
     };
 
-    // Firestore write — wired after template approval
-    // await writeToFirestore("registrations", payload);
-    console.log("[WTL] registration payload:", payload);
+    try {
+      const result = await submitRegistration(payload);
 
-    submitBtn.disabled  = false;
-    submitBtn2.disabled = false;
-    submitBtn.textContent = orig;
+      if (!result.ok && result.status === 400) {
+        // Payload itself was invalid: let the user fix it and resubmit, don't redirect them
+        // through a flow that implies success.
+        submitBtn.disabled  = false;
+        submitBtn2.disabled = false;
+        submitBtn.textContent  = orig;
+        submitBtn2.textContent = orig2;
+        setContentInert(false);
+        applyServerValidationErrors(result.data && result.data.errors);
+        return;
+      }
 
-    if (bumpSelected) {
-      showInterstitial();
-    } else {
-      const c = freeConfirmCopy();
-      showConfirmationThenRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group", c.heading, c.message);
+      if (!result.ok) {
+        // 429/5xx (even after the retry inside submitRegistration) or a network/timeout failure:
+        // don't strand the user on the form, but don't lose the lead either, queue it for a
+        // single resend attempt on next page load.
+        try {
+          localStorage.setItem(PENDING_REG_KEY, JSON.stringify(payload));
+        } catch (e) {
+          console.error("[WTL] failed to queue pending registration:", e);
+        }
+      }
+
+      submitBtn.disabled  = false;
+      submitBtn2.disabled = false;
+      submitBtn.textContent  = orig;
+      submitBtn2.textContent = orig2;
+
+      if (bumpSnapshot) {
+        showInterstitial();
+      } else {
+        const c = freeConfirmCopy();
+        showConfirmationThenRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group", c.heading, c.message);
+      }
+    } catch (err) {
+      // Defensive insurance: nothing here is expected to throw (submitRegistration already
+      // catches its own errors), but if a future change ever does, don't leave the page
+      // permanently inert with no way to recover, give control back to the user.
+      console.error("[WTL] unexpected error during submit:", err);
+      submitBtn.disabled  = false;
+      submitBtn2.disabled = false;
+      submitBtn.textContent  = orig;
+      submitBtn2.textContent = orig2;
+      setContentInert(false);
     }
   }
 
