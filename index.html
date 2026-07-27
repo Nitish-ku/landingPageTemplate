@@ -428,10 +428,10 @@
 </div>
 
 <!-- post-submit interstitial (paid path only — free path skips this) -->
-<div class="interstitial" id="interstitial">
+<div class="interstitial" id="interstitial" role="dialog" aria-modal="true" aria-labelledby="interstitialHeading">
   <div class="inter-inner">
     <div class="inter-badge">&#10003; You're in. Spot reserved.</div>
-    <h2>Add Sprint Copilot to your spot</h2>
+    <h2 id="interstitialHeading">Add Sprint Copilot to your spot</h2>
     <p class="idesc">Skip the blank-page paralysis. Sprint Copilot generates your landing page copy, pricing model, and outreach scripts in seconds.</p>
     <p class="iprice"><span class="strike">&#8377;3,799</span> &nbsp;<span class="now">&#8377;499</span></p>
     <button class="btn btn-sage" id="upgradeBtn">Pay &#8377;499 and get access &rarr;</button>
@@ -440,7 +440,7 @@
 </div>
 
 <!-- registration confirmation overlay, shown briefly before the WhatsApp/Cosmofeed redirect -->
-<div class="interstitial" id="confirmOverlay">
+<div class="interstitial" id="confirmOverlay" role="status" aria-live="polite">
   <div class="inter-inner" style="text-align:center;">
     <div class="inter-badge">&#10003; Registration confirmed</div>
     <h2 id="confirmHeading">You're in.</h2>
@@ -702,6 +702,7 @@
     document.body.style.overflow = "hidden";
     setContentInert(true);
     window.scrollTo(0,0);
+    document.getElementById("upgradeBtn").focus();
   }
   document.getElementById("upgradeBtn").addEventListener("click", () => {
     document.getElementById("interstitial").classList.remove("show");
@@ -713,10 +714,15 @@
     }
     showConfirmationThenRedirect(COSMOFEED_URL, "PAID / Cosmofeed", "Almost there.", "Taking you to secure checkout...");
   });
-  document.getElementById("skipUpgradeBtn").addEventListener("click", () => {
+  function skipUpgrade() {
     document.getElementById("interstitial").classList.remove("show");
     const c = freeConfirmCopy();
     showConfirmationThenRedirect(WHATSAPP_GROUP_URL, "FREE / WhatsApp group", c.heading, c.message);
+  }
+  document.getElementById("skipUpgradeBtn").addEventListener("click", skipUpgrade);
+  // Escape closes the paid-upsell interstitial the same way "skip" does, keeps the free path moving instead of leaving a keyboard user stuck
+  document.getElementById("interstitial").addEventListener("keydown", (e) => {
+    if (e.key === "Escape") skipUpgrade();
   });
 
   // copy for the free-path confirmation overlay, differs once the cohort has gone live (mid-sprint join, not a waitlist)
