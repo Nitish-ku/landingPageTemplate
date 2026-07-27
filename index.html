@@ -479,33 +479,55 @@
   const BACKEND_URL        = "https://wtl-backend-156822330505.asia-south1.run.app/api/register";
   const PENDING_REG_KEY    = "wtl_pending_registration";
 
+  // AbortSignal.timeout() is Safari/iOS Safari 16+ only, which includes Instagram's in-app
+  // browser on iPhone (WKWebView tracks the OS Safari version), a real slice of this campaign's
+  // actual traffic. Feature-detect instead of assuming it exists, a throw here on load previously
+  // would have silently broken every button on the page for anyone on an older browser.
+  function timeoutSignal(ms) {
+    if (typeof AbortSignal !== "undefined" && typeof AbortSignal.timeout === "function") {
+      return AbortSignal.timeout(ms);
+    }
+    if (typeof AbortController === "undefined") return undefined;
+    const c = new AbortController();
+    setTimeout(() => c.abort(), ms);
+    return c.signal;
+  }
+
   // On load, if a previous submission failed after exhausting its own retry (network failure,
   // or 429/5xx even after the retry inside submitRegistration()) and got queued to localStorage,
   // attempt to resend it exactly once here. The key is cleared before sending regardless of
   // outcome, so a persistent backend outage can never turn this into an infinite retry loop.
   function resendPendingRegistration() {
-    let raw;
+    // Whole function guarded: nothing in here should ever be able to throw past this point and
+    // break every other script below it (there's no DOMContentLoaded wrapper on this file, so an
+    // uncaught error here previously would have silently skipped every event listener registration
+    // further down the page, including both submit buttons).
     try {
-      raw = localStorage.getItem(PENDING_REG_KEY);
-    } catch (e) {
-      return;
+      let raw;
+      try {
+        raw = localStorage.getItem(PENDING_REG_KEY);
+      } catch (e) {
+        return;
+      }
+      if (!raw) return;
+      localStorage.removeItem(PENDING_REG_KEY);
+      let payload;
+      try {
+        payload = JSON.parse(raw);
+      } catch (e) {
+        return;
+      }
+      fetch(BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: timeoutSignal(8000),
+      }).catch((err) => {
+        console.error("[WTL] pending registration resend failed:", err);
+      });
+    } catch (err) {
+      console.error("[WTL] resendPendingRegistration failed unexpectedly:", err);
     }
-    if (!raw) return;
-    localStorage.removeItem(PENDING_REG_KEY);
-    let payload;
-    try {
-      payload = JSON.parse(raw);
-    } catch (e) {
-      return;
-    }
-    fetch(BACKEND_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(8000),
-    }).catch((err) => {
-      console.error("[WTL] pending registration resend failed:", err);
-    });
   }
   resendPendingRegistration();
 
@@ -679,7 +701,7 @@
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(8000),
+        signal: timeoutSignal(8000),
       });
       let data = null;
       try { data = await res.json(); } catch (e) { /* non-JSON body, ignore */ }
